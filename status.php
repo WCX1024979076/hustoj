@@ -99,21 +99,28 @@ $lock_time = date("Y-m-d H:i:s",time());
 $sql = "WHERE problem_id>0 ";
 
 if (isset($_GET['cid'])) {
+  /**
+   * 修改人：王春祥
+   * 修改日期：2021/1/28
+   * 修改目的：用于封榜运行
+   * 实现方法：劫持查询链接，强制加上用户名条件
+   */
   $cid = intval($_GET['cid']);
   $sql = $sql." AND `contest_id`='$cid' and num>=0 ";
   $str2 = $str2."&cid=$cid";
-  $sql_lock = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
+  $sql_lock = "SELECT `start_time`,`title`,`end_time`,`ftraining_date` FROM `contest` WHERE `contest_id`=?";
   $result = pdo_query($sql_lock,$cid);
   $rows_cnt = count($result);
   $start_time = 0;
   $end_time = 0;
-
+  $now=time();
   if ($rows_cnt>0) {
     $row = $result[0];
     $start_time = strtotime($row[0]);
     $title = $row[1];
     $end_time = strtotime($row[2]);       
-    
+    $ftraining_date=strtotime($row["ftraining_date"]);
+    $user_id=$_SESSION[$OJ_NAME.'_'.'user_id'];
 	$noip = (time()<$end_time) && (stripos($title,$OJ_NOIP_KEYWORD)!==false);
 	if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
 		isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
@@ -128,6 +135,24 @@ if (isset($_GET['cid'])) {
       require("template/".$OJ_TEMPLATE."/error.php");
       exit(0);
     }
+
+    if (isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])) ///管理员无此限制
+      ;
+    else
+    {
+      if($now<$ftraining_date && !isset($_GET['user_id'])) ///强制性转到自己的用户名下
+      {
+        header("Location: ./status.php?problem_id=&user_id=".$user_id."&cid=".$cid."&language=-1&jresult=-1");
+      }
+      else if($now<$ftraining_date&&isset($_GET['user_id']))
+      {
+        $user_id1=$_GET['user_id'];
+        if($user_id1 != $user_id)
+          header("Location: ./status.php?problem_id=&user_id=".$user_id."&cid=".$cid."&language=-1&jresult=-1");
+      }
+    }
+    
+    //结束
   }
 
   $lock_time = $end_time-($end_time-$start_time)*$OJ_RANK_LOCK_PERCENT;

@@ -56,9 +56,10 @@ else
 1.本次比赛从<?php echo $resultsql["start_time"]; ?>开始，于<?php echo $resultsql["end_time"];?>结束。<br>
 2.本次比赛分为训练赛和补题赛两部分，并将于<?php echo $resultsql["ftraining_date"]; ?>开始补题赛，在此之前，您可以任选择<?php echo substr($resultsql["training_length"],0,2)."小时".substr($resultsql["training_length"],3,2)."分钟" ;?>来参加训练赛。<br>
 3.计分方式：本场比赛采用ioi赛制，采用oi排行榜；补题赛期间封锁排行榜，排名不再改变，且补题赛所ac的题目均采用黄色标记。<br>
-4.为保证公平，在比赛结束之前严禁泄露题目。<br>
-5.点击确定，将代表您开始参加训练赛，计时开始。点击取消，则返回比赛列表界面。<br>
-6.本文本框文字待修改完善，欢迎提出意见。
+4.训练赛期间封榜运行，在榜单界面只能看到自己的分数，补题赛开始后，榜单重新开放。<br>
+5.为保证公平，在比赛结束之前严禁泄露题目。<br>
+6.点击确定，将代表您开始参加训练赛，计时开始。点击取消，则返回比赛列表界面。<br>
+7.本文本框文字待修改完善，欢迎提出意见。
 </div> 
 <div class="div" style="<?php if($view_cid>0) echo "display:none" ?>"> 
 您的训练赛已经结束，请等待补题赛开始！<br>

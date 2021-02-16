@@ -146,6 +146,12 @@
 					$view_title = $row['title'];
 					$view_start_time = $row['start_time'];
 					$view_end_time = $row['end_time'];
+					$ftraining_date=strtotime($row['ftraining_date']);
+					if($now<$ftraining_date)
+					{
+						echo "<h3>封榜运行，请求错误！</h3>";
+						exit(0);
+					}
 				}
 			}
 			?>

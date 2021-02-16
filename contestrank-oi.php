@@ -253,8 +253,30 @@ else
          $row=$result[0];
 // $row=$result[0];
 $pid_cnt=intval($row['pbc']);
-
-require("./include/contest_solutions.php"); ///查询所有提交！！！！
+/**
+ * 修改人：王春祥
+ * 修改时间：2021/1/28
+ * 修改目的：封榜运行
+ * 实现方法：修改sql命令，使训练赛期间只能查到自己的提交
+ */
+$user_id=$_SESSION[$OJ_NAME.'_'.'user_id'];
+$now=time();
+if($now>$ftraining_date||isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator']))
+{
+        require("./include/contest_solutions.php"); ///查询所有提交！！！！
+}
+else
+{
+        $sql="SELECT
+        user_id,nick,solution.result,solution.num,solution.in_date,solution.pass_rate
+                FROM
+                        solution where solution.contest_id='$cid' and solution.user_id='$user_id' and num>=0 and problem_id>0
+        ORDER BY user_id,solution_id";
+        
+        $result=pdo_query($sql);
+        $rows_cnt=count($result);
+}
+//结束
 //echo $sql;
 //$result=pdo_query($sql);
 $user_cnt=0;

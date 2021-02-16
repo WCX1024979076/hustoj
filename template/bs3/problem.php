@@ -76,9 +76,11 @@
 				if (isset($OJ_OI_MODE)&&$OJ_OI_MODE) {
 				} else {
 					echo "<div class='btn-group' role='group'>";
-  				echo "<a class='btn btn-primary btn-sm' role='button' href=status.php?problem_id=".$row['problem_id']."&jresult=4>$MSG_SOVLED: ".$row['accepted']."</a>";
-  				echo "<a class='btn btn-primary btn-sm' role='button' href=status.php?problem_id=".$row['problem_id'].">$MSG_SUBMIT_NUM: ".$row['submit']."</a>";
-  				echo "<a class='btn btn-primary btn-sm' role='button' href=problemstatus.php?id=".$row['problem_id'].">$MSG_STATISTICS</a>";
+  				//echo "<a class='btn btn-primary btn-sm' role='button' href=status.php?problem_id=".$row['problem_id']."&jresult=4>$MSG_SOVLED: ".$row['accepted']."</a>";
+				  //echo "<a class='btn btn-primary btn-sm' role='button' href=status.php?problem_id=".$row['problem_id'].">$MSG_SUBMIT_NUM: ".$row['submit']."</a>";
+				  $now1=time();
+				  if($now1>$ftraining_date)
+				  	echo "<a class='btn btn-primary btn-sm' role='button' href=problemstatus.php?id=".$row['problem_id'].">$MSG_STATISTICS</a>";
 				}
 
 	      if (isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator']) || isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])) {

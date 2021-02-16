@@ -200,7 +200,7 @@ if (isset($_GET['cid'])) {
 		isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
 		isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
 	   ) $noip=false;   //判断noip比赛
-	   
+	
 	foreach($result as $row)   //加载问题
  	{
 		$view_problemset[$cnt][0] = "";
@@ -242,7 +242,15 @@ if (isset($_GET['cid'])) {
 		else
 			$view_problemset[$cnt][4] = "";
     
-    $view_problemset[$cnt][5] = $row['submit'];
+	$view_problemset[$cnt][5] = $row['submit'];
+	/**
+	 * 修改人：王春祥
+	 * 修改日期：2021/1/28
+	 * 修改内容：训练赛期间隐去提交数目和AC数目
+	 */
+	if($now<$ftraining_date)
+		$view_problemset[$cnt][5]=$view_problemset[$cnt][4]="";
+	//结束
     $cnt++;
   }
 }

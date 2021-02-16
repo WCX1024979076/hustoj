@@ -8,6 +8,12 @@
 </head>
 <body>
 <?php
+/**
+ * 修改人：王春祥
+ * 修改日期：2021/1/28
+ * 修改目的：可视化分析队员做题数据
+ * 主要修改内容：php动态生成js代码，然后js本地渲染
+ */
 require_once("admin-header.php");
 if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator']))){
 echo "<a href='../loginpage.php'>Please Login First!</a>";
@@ -208,7 +214,7 @@ function print_array($array)
 	<div style="border: 1px  #000000; width: 90%; margin: 0 auto;">
 		<span>
 		<?php
-			echo '<div id="main" style="width: 940px;height:'.$row_cnt*100;
+			echo '<div id="main" style="width: 940px;height:'.($row_cnt*100+50);
 			echo 'px;"></div>';
 		?>
 		</span>
