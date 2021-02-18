@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>段位管理</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+	
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/twitter-bootstrap/4.2.1/css/bootstrap.min.css"/>
+	
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
+	
+</head>
+<body>
+<div class="box">
+    <div class="content">
+		<h3> 段位管理 </h3>
+        <!--添加按钮及bootstrap的模态框-->
+        <div class="export">
+            <button id="new_add" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#renyuan">
+                <img src="img/add_two.png"/>
+                <span>添加</span>
+            </button>
+            <div class="modal fade" id="renyuan">
+                <div class="modal-dialog modal-lg modal_position">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">添加</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <table id="xztb" class="table">
+                                <!--新修改弹窗的样式-->
+                                <tbody>
+                                <tr>
+                                    <td class="tb_bg"><label for=""><font style="font-size: 14px; color: red;">*</font>段位等级</label>
+                                    </td>
+                                    <td><input class="level_id" type="number" placeholder="请输入段位等级"/></td>
+                                    <td class="tb_bg"><label for=""><font style="font-size: 14px; color: red;">*</font>段位名称</label>
+                                    </td>
+                                    <td><input class="level_name" type="text" placeholder="请输入段位名称"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="tb_bg"><label for=""><font style="font-size: 14px; color: red;">*</font>段位最低题目要求</label>
+                                    </td>
+                                    <td><input class="level_problem_min" type="number" placeholder="请输入段位最低题目要求"/></td>
+
+                                </tr>
+                                <tr>
+									<td class="tb_bg"><label for="">段位基本题目列表</label></td>
+                                    <td><input type="text" placeholder="请输入段位基本题目列表"/></td>
+                                </tr>
+								<tr>
+									<td class="tb_bg"><label for="">段位拓展题目列表</label></td>
+                                    <td><input type="text" placeholder="请输入段位拓展题目列表"/></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button id="add_btn" type="button" class="btn btn-secondary">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--表格列表-->
+        <table id="tb" class="table">
+            <thead>
+            <tr>
+                <th>段位等级</th>
+                <th>段位名称</th>
+                <th>最低题目要求</th>
+				<th>初等题目</th>
+				<th>拓展题目</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="show_tbody">
+            <tr>
+                <td>1</td>
+                <td>小学生</td>
+                <td>10</td>
+				<td>1000,1001</td>
+				<td>1010,1011</td>
+                <td>
+                    <a href="#" class="edit">编辑</a>
+                    <a href="#" class="del">删除</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>中学生</td>
+                <td>15</td>
+				<td>1004,1005</td>
+				<td>1012,1013</td>
+                <td>
+                    <a href="#" class="edit">编辑</a>
+                    <a href="#" class="del">删除</a>
+                </td>
+            </tr>
+			 <tr>
+                <td>3</td>
+                <td>大学生</td>
+                <td>15</td>
+				<td>1002,1003</td>
+				<td>1014,1015</td>
+                <td>
+                    <a href="#" class="edit">编辑</a>
+                    <a href="#" class="del">删除</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="js/mejs.js"></script>
+</body>
+</html>

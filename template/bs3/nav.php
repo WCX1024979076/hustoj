@@ -79,6 +79,17 @@ if(stripos($_SERVER['REQUEST_URI'],"template")!==false)exit();
               <li <?php if ($url=="contest.php") echo " $ACTIVE";?>>
                 <a href="<?php echo $path_fix?>contest.php"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span> <?php echo $MSG_CONTEST?></a>
               </li>
+
+              <!--
+                *修改人：王春祥
+                *修改日期：2021/2/18
+                *修改目的：增加level等级赛  
+                -->
+              <li <?php if ($url=="level.php") echo " $ACTIVE";?>>
+                <a href="<?php echo $path_fix?>level.php"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span> <?php echo "段位赛"?></a>
+              </li>
+              <!-- 结束 -->
+            
             <?php }else{?>
               <li <?php if ($url=="contest.php") echo " $ACTIVE";?>>
                 <a href="<?php echo $path_fix?>contest.php" ><span class="glyphicon glyphicon-fire" aria-hidden="true"></span> <?php echo $MSG_CONTEST?></a>
