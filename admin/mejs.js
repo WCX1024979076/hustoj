@@ -244,4 +244,7 @@ function ajax(jsonObj)
             alert(textStatus);
         }
     });
+    $.when(myajax).done(function () {
+        window.location.reload();
+    });
 }

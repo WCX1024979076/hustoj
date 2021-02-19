@@ -57,6 +57,8 @@
 <?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){?>
       <a class="dropdown-item btn-sm" href="privilege_list.php" target="main" title="<?php echo $MSG_HELP_PRIVILEGE_LIST?>"><b><?php echo $MSG_USER."-".$MSG_PRIVILEGE."-".$MSG_LIST?></b></a>
       <a class="dropdown-item btn-sm" href="privilege_add.php" target="main" title="<?php echo $MSG_HELP_ADD_PRIVILEGE?>"><b><?php echo $MSG_USER."-".$MSG_PRIVILEGE."-".$MSG_ADD?></b></a>
+      <a class="dropdown-item btn-sm" href="level.php" target="main" title="<?php echo "进行段位管理"?>"><b><?php echo "段位管理"?></b></a>
+
 <?php }?>
     </div>
   </div>

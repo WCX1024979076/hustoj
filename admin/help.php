@@ -60,6 +60,10 @@
       <td><center><a class='btn btn-primary btn-sm' href="privilege_add.php" target="main"><b><?php echo $MSG_USER."-".$MSG_PRIVILEGE."-".$MSG_ADD?></b></a></center></td>
       <td><p><?php echo $MSG_HELP_ADD_PRIVILEGE?></p></td>
     </tr>
+    <tr>
+      <td><center><a class='btn btn-primary btn-sm' href="level.php" target="main"><b><?php echo "段位管理"?></b></a></center></td>
+      <td><p><?php echo "进行段位增加、修改、删除等操作。"?></p></td>
+    </tr>
   <?php }?>
 
   <?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])){?>
