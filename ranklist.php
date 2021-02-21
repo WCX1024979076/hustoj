@@ -21,15 +21,21 @@
 
 		}
  	}
+
+
+        $sql="SELECT * FROM level_list";
+        $result_level=pdo_query($sql);
+
+
         $view_title= $MSG_RANKLIST;
 
-        $scope="";
+        $scope="";  ///年月日查询条件
         if(isset($_GET['scope']))
                 $scope=$_GET['scope'];
         if($scope!=""&&$scope!='d'&&$scope!='w'&&$scope!='m')
                 $scope='y';
 	$where="";
-	if(isset($_GET['prefix'])){
+	if(isset($_GET['prefix'])){  ///关键词查询
 		$prefix=$_GET['prefix'];
 		$where="where user_id like ?";
 	}else{
@@ -47,7 +53,7 @@
                 if ($rank < 0)
                         $rank = 0;
 
-                $sql = "SELECT `user_id`,`nick`,`solved`,`submit` FROM `users` $where ORDER BY `solved` DESC,submit,reg_time  LIMIT  " . strval ( $rank ) . ",$page_size";
+                $sql = "SELECT `user_id`,`nick`,`solved`,`submit`,`level_id` FROM `users` $where ORDER BY `solved` DESC,submit,reg_time  LIMIT  " . strval ( $rank ) . ",$page_size";
 
                 if($scope){
                         $s="";
@@ -67,7 +73,7 @@
                                         $s=date('Y').'-01-01';
                         }
                         //echo $s."<-------------------------";
-                        $sql="SELECT users.`user_id`,`nick`,s.`solved`,t.`submit` FROM `users`
+                        $sql="SELECT users.`user_id`,`nick`,s.`solved`,t.`submit`,`level_id` FROM `users`
                                         inner join
                                         (select count(distinct problem_id) solved ,user_id from solution 
 						where in_date>str_to_date('$s','%Y-%m-%d') and result=4 
@@ -117,7 +123,7 @@
                                 $view_rank[$i][5]= "0.00%";
                         else
                                 $view_rank[$i][5]= sprintf ( "%.02lf%%", 100 * $row['solved'] / $row['submit'] );
-
+                        $view_rank[$i][6]=$result_level[$row['level_id']-1]['level_name'];      ///段位
 //                      $i++;
                 }
 

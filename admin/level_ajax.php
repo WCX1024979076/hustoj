@@ -82,4 +82,12 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
         echo "添加成功";
 
     }
+    else if($type==3)
+    {
+        $name_id=$_POST["name_id"];	
+        $value=intval($_POST["value"]);
+        $sql="UPDATE users SET level_id=? WHERE user_id=?";
+        pdo_query($sql,$value,$name_id);
+        echo "修改成功";
+    }
 }

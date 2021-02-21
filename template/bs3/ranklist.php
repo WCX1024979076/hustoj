@@ -61,6 +61,7 @@
             <td class='text-center'><?php echo $MSG_SOVLED?></td>
             <td class='text-center'><?php echo $MSG_SUBMIT?></td>
             <td class='text-center'><?php echo $MSG_RATIO?></td>
+            <td class='text-center'><?php echo "段位"?></td> <!-- 增加段位展示 -->
           </tr>
         </thead>
         <tbody>

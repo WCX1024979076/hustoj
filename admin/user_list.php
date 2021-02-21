@@ -43,12 +43,15 @@ $sql = "";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $keyword = $_GET['keyword'];
   $keyword = "%$keyword%";
-  $sql = "SELECT `user_id`,`nick`,`accesstime`,`reg_time`,`ip`,`school`,`defunct` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?) ORDER BY `user_id` DESC";
+  $sql = "SELECT `user_id`,`nick`,`accesstime`,`reg_time`,`ip`,`school`,`defunct`,`level_id` FROM `users` WHERE (user_id LIKE ?) OR (nick LIKE ?) OR (school LIKE ?) ORDER BY `user_id` DESC";
   $result = pdo_query($sql,$keyword,$keyword,$keyword);
 }else{
-  $sql = "SELECT `user_id`,`nick`,`accesstime`,`reg_time`,`ip`,`school`,`defunct` FROM `users` ORDER BY `reg_time` DESC LIMIT $sid, $idsperpage";
+  $sql = "SELECT `user_id`,`nick`,`accesstime`,`reg_time`,`ip`,`school`,`defunct`,`level_id` FROM `users` ORDER BY `reg_time` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }
+
+$sql="SELECT * FROM level_list";
+$result_level=pdo_query($sql);
 ?>
 
 <center>
@@ -69,6 +72,7 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       <td>USE</td>
       <td>P/W</td>
       <td>PRIVILEGE</td>
+      <td>段位</td>
       </tr>
     <?php
     foreach($result as $row){
@@ -86,6 +90,26 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       }
         echo "<td><a href=changepass.php?uid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">"."Reset"."</a></td>";
         echo "<td><a href=privilege_add.php?uid=".$row['user_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">"."Add"."</a></td>";
+      
+
+        /**
+         * 修改人：王春祥
+         * 修改日期：2021/2/20
+         * 修改目的：增加段位修改标签
+         */
+        echo "<td>";
+        echo "<select   style='width:90px;' id='".$row['user_id']."' onchange=\"submitForm('".$row['user_id']."');\" > ";
+        foreach($result_level as $row_level)
+        {
+          echo "<option value='".$row_level['level_id']."'";
+          if($row['level_id']==$row_level['level_id'])
+          {
+            echo "selected";
+          }
+          echo ">".$row_level['level_name']."</option>";
+        }
+        echo "</select>";
+        echo "<td>";
       echo "</tr>";
     } ?>
   </table>
@@ -109,5 +133,35 @@ if(!(isset($_GET['keyword']) && $_GET['keyword']!=""))
   echo "</div>";
 }
 ?>
-
+<script>
+function submitForm(name){
+    var myselect=document.getElementById(name);
+    var index=myselect.selectedIndex ; 
+    var value=myselect.options[index].value;
+     var data={"type":3,"name_id":name,"value":value};
+    console.log(data);
+   	ajax(data);/// 异步提交数据
+}
+function ajax(jsonObj)
+{
+    myajax=$.ajax({
+        type:"post",						//提交方式
+        url:"/admin/level_ajax.php",		//执行的url(控制器/操作方法)
+        async:true,							//是否异步
+        data:jsonObj,						//获取form表单的数据
+        datatype:'json',					//数据格式
+        success:function(data){
+            console.log(data);				//打印
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert(XMLHttpRequest.status);
+            alert(XMLHttpRequest.readyState);
+            alert(textStatus);
+        }
+    });
+    $.when(myajax).done(function () {
+        ;
+    });
+}
+</script>
 </div>

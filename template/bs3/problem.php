@@ -70,8 +70,19 @@
         if($pr_flag){
 					echo "<a class='btn btn-info btn-sm' href='submitpage.php?id=$id' role='button'>$MSG_SUBMIT</a>";
         }else{
-					echo "<a class='btn btn-info btn-sm' href='submitpage.php?cid=$cid&pid=$pid&langmask=$langmask' role='button'>$MSG_SUBMIT</a>";
-  					echo "<a class='btn btn-primary btn-sm' role='button' href='contest.php?cid=$cid'>$MSG_PROBLEM$MSG_LIST</a>";
+			/**
+			 * 修改段位赛提交
+			 */ 
+			if(isset($level_flag))
+			{
+				echo "<a class='btn btn-info btn-sm' href='submitpage.php?level_id=$level_id&problem_id=$problem_id' role='button'>$MSG_SUBMIT</a>";
+				echo "<a class='btn btn-primary btn-sm' role='button' href='level.php'>$MSG_PROBLEM$MSG_LIST</a>";
+			}
+			else
+			{
+				echo "<a class='btn btn-info btn-sm' href='submitpage.php?cid=$cid&pid=$pid&langmask=$langmask' role='button'>$MSG_SUBMIT</a>";
+				echo "<a class='btn btn-info btn-sm' href='submitpage.php?cid=$cid&pid=$pid&langmask=$langmask' role='button'>$MSG_SUBMIT</a>";
+			}
         }
 				if (isset($OJ_OI_MODE)&&$OJ_OI_MODE) {
 				} else {
@@ -208,7 +219,16 @@
         if($pr_flag){
 					echo "<a class='btn btn-info btn-sm' href='submitpage.php?id=$id' role='button'>$MSG_SUBMIT</a>";
         }else{
-					echo "<a class='btn btn-info btn-sm' href='submitpage.php?cid=$cid&pid=$pid&langmask=$langmask' role='button'>$MSG_SUBMIT</a>";
+			/**
+			 * 修改人：王春祥
+			 * 修改日期：2021/2/19
+			 * 修改目的：段位赛题目提交
+			 */
+			if(isset($level_flag))
+				echo "<a class='btn btn-info btn-sm' href='submitpage.php?level_id=$level_id&problem_id=$problem_id' role='button'>$MSG_SUBMIT</a>";
+			else
+				echo "<a class='btn btn-info btn-sm' href='submitpage.php?cid=$cid&pid=$pid&langmask=$langmask' role='button'>$MSG_SUBMIT</a>";
+			//结束
         }
         if ($OJ_BBS) echo "<a class='btn btn-warning btn-sm' href='bbs.php?pid=".$row['problem_id']."$ucid'>$MSG_BBS</a>";
         ?>

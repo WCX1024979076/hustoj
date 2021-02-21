@@ -31,8 +31,15 @@
           <?php if (isset($id)){?>
             <br>
             <?php echo $MSG_PROBLEM_ID." : "?> <span class=blue><?php echo $id?></span>
-            <br>
+            <br>  
             <input id=problem_id type='hidden' value='<?php echo $id?>' name="id" >
+            <br>
+          <?php } else if(isset($level_id)){?>
+            <br>
+            <?php echo $MSG_PROBLEM_ID." : "?> <span class=blue><?php echo $problem_id?></span>
+            <br>
+            <input id=problem_id type='hidden' value='<?php echo $problem_id?>' name="problem_id" >
+            <input id=level_id type='hidden' value='<?php echo $level_id?>' name="level_id" >
             <br>
           <?php } else {
           //$PID="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -244,14 +251,25 @@
         $("#hide_source").val(editor.getValue());
       }
 
-      var mark="<?php echo isset($id)?'problem_id':'cid';?>";
+      var mark="<?php 
+      if(isset($id))
+        echo 'problem_id';
+      else if(isset($level_id))
+        echo 'level_id';
+      else
+        echo 'cid';
+      ?>";
       var problem_id=document.getElementById(mark);
-
+      
       if(mark=='problem_id')
         problem_id.value='<?php if (isset($id))echo $id?>';
-      else
+      else if(mark=='cid')
         problem_id.value='<?php if (isset($cid))echo $cid?>';
-
+      else
+      {
+        problem_id.level_id='<?php if (isset($level_id))echo $level_id?>';
+        problem_id.problem_id='<?php if (isset($problem_id))echo $problem_id?>';
+      }
       document.getElementById("frmSolution").target="_self";
       document.getElementById("frmSolution").submit();
     }

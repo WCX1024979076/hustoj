@@ -41,6 +41,17 @@ else if (isset($_GET['cid']) && isset($_GET['pid'])) {
 	$problem_id = $row[0];
 	$sample_sql = "SELECT p.sample_input, p.sample_output, p.problem_id FROM problem p WHERE problem_id = ? ";
 }
+else if (isset($_GET['level_id']) && isset($_GET['problem_id'])) {
+	/**
+	 * 修改人：王春祥
+	 * 修改时间：2021/1/19
+	 * 修改目的：段位赛提交通道
+	 */
+	$level_id = intval($_GET['level_id']);
+	$problem_id = intval($_GET['problem_id']);
+	$sample_sql = "SELECT p.sample_input, p.sample_output, p.problem_id FROM problem p WHERE problem_id = ? ";
+	//结束
+}
 else {
 	$view_errors = "<h2>No Such Problem!</h2>";
 	require("template/".$OJ_TEMPLATE."/error.php");
@@ -107,7 +118,6 @@ if (isset($sample_sql)) {
 	else {
 	  $result = pdo_query($sample_sql,$problem_id);
 	}
-
 	if($result == false)
 	{
 		$view_errors = "<h2>No Such Problem!</h2>";

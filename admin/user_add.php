@@ -47,7 +47,7 @@ if(isset($_POST['do'])){
           $ulist = $ulist.$id_pw[0]." ".$id_pw[1]."\n";
         } else {
           $passwd = pwGen($id_pw[1]);
-          $sql = "INSERT INTO `users` (`user_id`, `password`, `reg_time`, `nick`) VALUES (?, ?, NOW(), ?);";
+          $sql = "INSERT INTO `users` (`user_id`, `password`, `reg_time`, `nick`,`level_id`) VALUES (?, ?, NOW(), ?,1);";
           pdo_query($sql, $id_pw[0], $passwd, $id_pw[0]);
           echo $id_pw[0]." is added!<br>";
 

@@ -52,6 +52,10 @@ if (isset($_POST['cid'])) {
     
   $sql = "SELECT `problem_id`,'N' FROM `contest_problem` WHERE `num`='$pid' AND contest_id=$cid";
 }
+else if (isset($_POST['level_id'])) {
+  $level_id = intval($_POST['level_id']);
+  $problem_id = abs(intval($_POST['problem_id']));
+}
 else {
   $id = intval($_POST['id']);
   $sql = "SELECT `problem_id` FROM `problem` WHERE `problem_id`='$id' ";
@@ -90,6 +94,26 @@ if (isset($_POST['id'])) {
   $id = intval($_POST['id']);
   $test_run = $id<=0;
   $langmask = $OJ_LANGMASK;
+}
+else if (isset($_POST['level_id']) && isset($_POST['problem_id'])) {
+  /**
+   * 修改人：王春祥
+   * 修改日期：2021/2/19
+   * 修改目的：段位赛通道
+   */
+  $level_id = intval($_POST['level_id']);
+  $problem_id = intval($_POST['problem_id']);
+  $test_run = $level_id<0;
+  $langmask = $OJ_LANGMASK;
+  if ($test_run) {
+    $level_id = -$level_id;
+  }
+
+  $id = $problem_id;
+  
+  if ($test_run) {   ///猜测为自测运行，自测测试样例，这里test_run均为false
+    $id = -$id;
+  }
 }
 else if (isset($_POST['pid']) && isset($_POST['cid']) && $_POST['cid']!=0) {
   $pid = intval($_POST['pid']);
@@ -240,19 +264,19 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
   $ip = htmlentities($tmp_ip[0], ENT_QUOTES, "UTF-8");
 }
 
-if ($len < 2) {
+if ($len < 2) {   ///代码长度限制
   $view_errors = $MSG_TOO_SHORT."<br>";
   require "template/".$OJ_TEMPLATE."/error.php";
   exit(0);
 }
 
-if ($len > 65536) {
+if ($len > 65536) {  ///最大上限
   $view_errors = $MSG_TOO_LONG."<br>";
   require "template/" . $OJ_TEMPLATE . "/error.php";
   exit(0);
 }
 
-if (!$OJ_BENCHMARK_MODE) {
+if (!$OJ_BENCHMARK_MODE) { ///提交时间间隔太短
   // last submit
   $now = strftime("%Y-%m-%d %X", time()-10);
   $sql = "SELECT `in_date` FROM `solution` WHERE `user_id`=? AND in_date>? ORDER BY `in_date` DESC LIMIT 1";
@@ -276,9 +300,19 @@ if (~$OJ_LANGMASK&(1<<$language)) {
     $nick = "Guest";
   }
 
-  if (!isset($pid)) {
+  if (!isset($pid)&&!isset($level_id)) {
     $sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result) VALUES(?,?,?,NOW(),?,?,?,14)";
     $insert_id = pdo_query($sql, $id, $user_id, $nick, $language, $ip, $len);
+  }
+  else if(isset($level_id))
+  {
+    /**
+     * 段位赛通道
+     */
+    
+    $sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,result,level_id) VALUES(?,?,?,NOW(),?,?,?,14,?)";
+    echo $sql;
+    $insert_id = pdo_query($sql, $id, $user_id, $nick, $language, $ip, $len,$level_id);
   }
   else {
     $sql = "INSERT INTO solution(problem_id,user_id,nick,in_date,language,ip,code_length,contest_id,num,result) VALUES(?,?,?,NOW(),?,?,?,?,?,14)";
@@ -314,6 +348,13 @@ if (~$OJ_LANGMASK&(1<<$language)) {
     if (isset($cid) && $cid>0) {
       $sql = "UPDATE contest_problem SET c_submit=c_submit+1 WHERE contest_id=? AND num=?";
       pdo_query($sql,$cid,$pid);
+    }
+    else if (isset($level_id) && $level_id>0) {
+      /**
+       * 段位赛通道
+       */
+      $sql = "UPDATE level_problem SET c_submit=c_submit+1 WHERE level_id=? AND problem_id=?";
+      pdo_query($sql,$level_id,$problem_id);
     }
   }
 
@@ -399,7 +440,7 @@ if (isset($cid)) {
 }
 
 if (!$test_run) {
-  header("Location: $statusURI");
+   header("Location: $statusURI");
 }
 else {
   if (isset($_GET['ajax'])) {

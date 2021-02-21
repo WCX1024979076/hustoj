@@ -76,6 +76,10 @@
 <div class="box">
     <div class="content">
 		<h3> 段位管理 </h3>
+        <h5>注：</h5>
+        <h6>1.段位编号从1开始，且必须连续。</h6>
+        <h6>2.题目编号之间用','（英）来分隔。</h6>
+        <h6>3.最低题目要求为基础题目数目和拓展题目数目总和。</h6>
         <!--添加按钮及bootstrap的模态框-->
         <div class="export">
             <button id="new_add" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#renyuan">
@@ -108,7 +112,7 @@
 
                                 </tr>
                                 <tr>
-									<td class="tb_bg"><label for="">段位基本题目列表</label></td>
+									<td class="tb_bg"><label for="">段位基础题目列表</label></td>
                                     <td><input type="text" placeholder="请输入段位基本题目列表"/></td>
                                 </tr>
 								<tr>
@@ -133,7 +137,7 @@
                 <th>段位等级</th>
                 <th>段位名称</th>
                 <th>最低题目要求</th>
-                <th>初等题目</th>
+                <th>基础题目</th>
                 <th>拓展题目</th>
                 <th>操作</th>
             </tr>
