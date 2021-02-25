@@ -32,8 +32,8 @@ $(function () {
     $('#renyuan').on('hide.bs.modal',function() {
         addEnter = true;
         $('#show_tbody tr').removeClass('has_case');
-        $('#xztb input').val(' ');
-        $('#xztb select').find('option:first').prop('selected', true)
+        $('#xztb input').val('');
+        $('#xztb select').find('option:first').prop('selected', true);
     });
 
 })

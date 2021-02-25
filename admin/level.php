@@ -98,9 +98,11 @@
                                 <!--新修改弹窗的样式-->
                                 <tbody>
                                 <tr>
-                                    <td class="tb_bg"><label for=""><font style="font-size: 14px; color: red;">*</font>段位等级</label>
+                                    <td width=150px class="tb_bg"><label for=""><font style="font-size: 14px; color: red;">*</font>段位等级</label>
                                     </td>
                                     <td><input class="level_id" type="number" placeholder="请输入段位等级"/></td>
+                                </tr>
+                                <tr>
                                     <td class="tb_bg"><label for=""><font style="font-size: 14px; color: red;">*</font>段位名称</label>
                                     </td>
                                     <td><input class="level_name" type="text" placeholder="请输入段位名称"/></td>

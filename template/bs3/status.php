@@ -34,7 +34,14 @@
 				<?php echo $MSG_USER?>
 				<input class="form-control" type=text size=4 name=user_id value='<?php echo  htmlspecialchars($user_id, ENT_QUOTES) ?>'>&nbsp;&nbsp;
 				<?php if (isset($cid)) echo "<input type='hidden' name='cid' value='$cid'>";?>
-
+				<?php	
+					/**
+					 * 修改人：王春祥
+					 * 修改日期：2021/2/25
+					 * 修改目的：段位赛提交
+					 */
+					if (isset($level_id)) echo "<input type='hidden' name='level_id' value='$level_id'>";
+				?>
 				<?php echo $MSG_LANG?> 
 				<select class="form-control" size="1" name="language">
 					<option value="-1">All</option>

@@ -57,7 +57,7 @@
 					<?php
 						echo "<li class='" . ( $type == 1 ? "active " : "" ) . "page-item'> <a href='level.php?level_id=" . $level_id . "&type=1'>" . 基础题目 . "</a></li>";
 						echo "<li class='" . ( $type == 2 ? "active " : "" ) . "page-item'> <a href='level.php?level_id=" . $level_id . "&type=2'>" . 拓展题目 . "</a></li>";
-						echo "<li class='" . "page-item'> <a href='status.php?user_id=" . $user_id . "'>" . 提交状态 . "</a></li>";
+						echo "<li class='" . "page-item'> <a href='status.php?level_id=".$level_id."'>" . 提交状态 . "</a></li>";
 						if($easy_ac+$hard_ac>=$result_level[$level_id-1]['level_problem_min']&& $level_id==$user_level && $user_level!=$view_total_level)
 							echo "<li class='" . "page-item'> <a href='level.php?level_up=1	'>" . 可晋级 . "</a></li>";
 					?>	

@@ -151,7 +151,6 @@ if (isset($_GET['cid'])) {
           header("Location: ./status.php?problem_id=&user_id=".$user_id."&cid=".$cid."&language=-1&jresult=-1");
       }
     }
-    
     //结束
   }
 
@@ -167,8 +166,21 @@ if (isset($_GET['cid'])) {
   else {
     $lock = false;
   }
-        
+
   //require_once("contest-header.php");
+}
+else if (isset($_GET['level_id'])) 
+{
+  /**
+   * 修改人：王春祥
+   * 修改日期：2021/1/28
+   * 修改目的：查询段位赛提交
+   * 实现方法：修改sql语句
+   */
+  $level_id = intval($_GET['level_id']);
+  $sql = $sql." AND `level_id`='$level_id'";
+  // 结束
+
 }
 else {
   //require_once("oj-header.php");
@@ -337,10 +349,16 @@ for ($i=0; $i<$rows_cnt; $i++) {
   $view_status[$i][0] = $row['solution_id'];
        
   if ($row['contest_id']>0) {
+    /**
+     * 修改人：王春祥
+     * 修改日期：2021/2/5
+     * 修改目的：点击用户id时跳转
+     */
     if (isset($_SESSION[$OJ_NAME.'_'.'administrator']))
-      $view_status[$i][1] = "<a href='contestrank.php?cid=".$row['contest_id']."&user_id=".$row['user_id']."#".$row['user_id']."' title='".$row['ip']."'>".$row['user_id']."</a>";
+      $view_status[$i][1] = "<a href='contestrank-oi.php?cid=".$row['contest_id']."&user_id=".$row['user_id']."#".$row['user_id']."' title='".$row['ip']."'>".$row['user_id']."</a>";
     else
-      $view_status[$i][1] = "<a href='contestrank.php?cid=".$row['contest_id']."&user_id=".$row['user_id']."#".$row['user_id']."'>".$row['user_id']."</a>";
+      $view_status[$i][1] = "<a href='contestrank-oi.php?cid=".$row['contest_id']."&user_id=".$row['user_id']."#".$row['user_id']."'>".$row['user_id']."</a>";
+    // 结束
   }
   else {
     if (isset($_SESSION[$OJ_NAME.'_'.'administrator']))
@@ -384,6 +402,18 @@ for ($i=0; $i<$rows_cnt; $i++) {
       }
       $view_status[$i][2] .= "</div>";
     }
+  }
+  else if(isset($level_id))
+  {
+    /**
+     * 修改人：王春祥
+     * 修改日期：2021/2/25
+     * 修改目的：段位赛提交界面
+     */
+    
+    $view_status[$i][2] = "<div class=center><a href='problem.php?problem_id=".$row['problem_id']."&level_id=".$level_id."'>".$row['problem_id']."</a></div>";
+
+    // 结束
   }
   else {
     $view_status[$i][2] = "<div class=center><a href='problem.php?id=".$row['problem_id']."'>".$row['problem_id']."</a></div>";

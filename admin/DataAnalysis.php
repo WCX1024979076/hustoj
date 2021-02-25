@@ -214,7 +214,7 @@ function print_array($array)
 	<div style="border: 1px  #000000; width: 90%; margin: 0 auto;">
 		<span>
 		<?php
-			echo '<div id="main" style="width: 940px;height:'.($row_cnt*100+50);
+			echo '<div id="main" style="width: 940px;height:'.($row_cnt*60+50);
 			echo 'px;"></div>';
 		?>
 		</span>
@@ -263,7 +263,7 @@ function print_array($array)
 				name:'训练赛AC数目',
 				type:'bar',
 				stack: '训练赛',
-				barWidth:20,
+				barWidth:15,
 				data:<?php print_array($training_ac); ?>,
 				itemStyle:{
 						normal:
@@ -276,7 +276,7 @@ function print_array($array)
 				name:'训练赛WA数目',
 				type:'bar',
 				stack: '训练赛',
-				barWidth:20,
+				barWidth:15,
 				data:<?php print_array($training_wa); ?>,
 				itemStyle:{
 						normal:
@@ -289,7 +289,7 @@ function print_array($array)
 				name:'补题赛AC数目',
 				type:'bar',
 				stack: '补题赛',
-				barWidth:20,
+				barWidth:15,
 				data:<?php print_array($ftraining_ac); ?>,
 				itemStyle:{
 						normal:
@@ -302,7 +302,7 @@ function print_array($array)
 				name:'补题赛WA数目',
 				type:'bar',
 				stack: '补题赛',
-				barWidth:20,
+				barWidth:15,
 				data:<?php print_array($ftraining_wa); ?>,
 				itemStyle:{
 						normal:

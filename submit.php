@@ -438,7 +438,12 @@ $statusURI = "status.php?user_id=".$_SESSION[$OJ_NAME.'_'.'user_id'];
 if (isset($cid)) {
   $statusURI .= "&cid=$cid&fixed=";
 }
-
+else if(isset($level_id))
+{
+  /// 段位赛提交榜单界面
+  $statusURI .= "&cid=$level_id&fixed=";
+  /// 结束
+}
 if (!$test_run) {
    header("Location: $statusURI");
 }
