@@ -441,7 +441,7 @@ if (isset($cid)) {
 else if(isset($level_id))
 {
   /// 段位赛提交榜单界面
-  $statusURI .= "&cid=$level_id&fixed=";
+  $statusURI .= "&level_id=$level_id&fixed=";
   /// 结束
 }
 if (!$test_run) {

@@ -97,7 +97,27 @@ foreach($result as $row)   //加载问题
    $view_problemset[$cnt][0] = "";
   $view_problemset[$cnt][1] = "<a href='problem.php?level_id=$level_id&problem_id=".$row['problem_id']."'>".$row['problem_id']."</a>";
   $view_problemset[$cnt][2] = "<a href='problem.php?level_id=$level_id&problem_id=".$row['problem_id']."'>".$row['title']."</a>"; 
-  $view_problemset[$cnt][3] = $row['source'];
+  $view_problemset[$cnt][3] = "<div pid='".$row['problem_id']."' fd='source' class='center'>";
+  $category = array();
+	$cate = explode(" ",$row['source']);
+	foreach ($cate as $cat) {
+		array_push($category,trim($cat));	
+	}
+
+	foreach ($category as $cat) {
+		if(trim($cat)=="")
+			continue;
+
+		$hash_num = hexdec(substr(md5($cat),0,7));
+		$label_theme = $color_theme[$hash_num%count($color_theme)];
+
+		if ($label_theme=="") 
+			$label_theme = "default";
+
+		$view_problemset[$cnt][3] .= "<a title='".htmlentities($cat,ENT_QUOTES,'UTF-8')."' class='label label-$label_theme' style='display: inline-block;' href='problemset.php?search=".htmlentities($cat,ENT_QUOTES,'UTF-8')."'>".mb_substr($cat,0,10,'utf8')."</a>&nbsp;";
+	}
+
+  $view_problemset[$cnt][3] .= "</div >";
   $view_problemset[$cnt][4] = $row['accepted'];
   $view_problemset[$cnt][5] = $row['submit'];
   $cnt++;

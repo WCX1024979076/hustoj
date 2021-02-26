@@ -61,7 +61,7 @@
 						if($easy_ac+$hard_ac>=$result_level[$level_id-1]['level_problem_min']&& $level_id==$user_level && $user_level!=$view_total_level)
 							echo "<li class='" . "page-item'> <a href='level.php?level_up=1	'>" . 可晋级 . "</a></li>";
 					?>	
-
+ 
 				</ul>
 				<?php echo "<br>当前段位：".$result_level[$user_level-1]['level_name']."，\t"; ?>
 					<?php echo $result_level[$level_id-1]['level_name']."AC数目：".($easy_ac+$hard_ac)."，\t"; ?>
@@ -99,7 +99,7 @@
 								echo "<tr class='evenrow'>";
 							$i = 0;
 							foreach ( $row as $table_cell ) {
-								if ( $i == 1  )echo "<td style=\"text-align:center\"  class='hidden-xs'>";
+								if ( $i == 1 || $i==3 )echo "<td style=\"text-align:center\"  class='hidden-xs'>";
 								else echo "<td style=\"text-align:center\">";
 								echo "\t" . $table_cell;
 								echo "</td>";
