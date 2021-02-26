@@ -76,7 +76,7 @@
 			if(isset($level_flag))
 			{
 				echo "<a class='btn btn-info btn-sm' href='submitpage.php?level_id=$level_id&problem_id=$problem_id' role='button'>$MSG_SUBMIT</a>";
-				echo "<a class='btn btn-primary btn-sm' role='button' href='level.php'>$MSG_PROBLEM$MSG_LIST</a>";
+				echo "<a class='btn btn-primary btn-sm' role='button' href='level.php?level_id=$level_id'>$MSG_PROBLEM$MSG_LIST</a>";
 			}
 			else
 			{
