@@ -65,9 +65,7 @@ if (isset($_GET['level_id']))
 else
   $level_id = $user_level;
 if($level_id>$user_level)
-{
   $error_msg="未达到段位要求，请返回。<a href="."/level.php?level_id=".$user_level.">点击跳转</a>";
-}
 
 if(isset($_GET['type']))
   $type = intval($_GET['type']);
@@ -130,9 +128,11 @@ $hard_ac=pdo_query($sql,2,$level_id,$_SESSION[$OJ_NAME.'_'.'user_id'])[0][0];
 $sql="SELECT COUNT(problem_id) FROM level_problem WHERE level_id=? AND type=1";
 $easy_size=pdo_query($sql,$level_id)[0][0];
 if($type==2&&$easy_ac!=$easy_size&&!isset($error_msg))
-{
   $error_msg="请先完成所有的基础题目！";
-}
+
+if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])) ///管理员
+  $error_msg=NULL;
+
 ////////////////////////Template
 require("template/".$OJ_TEMPLATE."/level.php");
 /////////////////////////Common foot/
