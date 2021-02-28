@@ -96,13 +96,14 @@
           }
           else
           {
-            echo "训练赛时长：".$training_length."<br>";
-            echo "登陆时间：".date("Y-m-d H:i:s",$login_time)."<br>";
+            // echo "训练赛时长：".$training_length."<br>";
+            echo "训练赛开始时间：".date("Y-m-d H:i:s",$login_time)."<br>";
             echo "训练赛结束时间：";
             $time1=(int)((intval(substr($training_length,0,2))*60*60+intval(substr($training_length,3,2))*60+$login_time));
             $time2=(int)($ftraining_date);
             $time_finish=min($time1,$time2);
             echo date("Y-m-d H:i:s",$time_finish);
+            echo '<div id="showtime"></div>';
           }
         }
         else
@@ -184,6 +185,32 @@
 <?php include("template/$OJ_TEMPLATE/js.php");?>      
 
 <script src="include/sortTable.js"></script>
+<style>
+#showtime {font-weight:600; font-size:18px;}
+</style>
+<script>
+ 
+/**
+ * 修改人：王春祥
+ * 修改日期：2021/2/28
+ * 修改目的：倒计时js控制
+ */
+var showtime = function () {
+    var nowtime = new Date(),  //获取当前时间
+        endtime = new Date("<?php echo date("Y-m-d H:i:s",$time_finish); ?>");  //定义结束时间
+    var lefttime = endtime.getTime() - nowtime.getTime(),  //距离结束时间的毫秒数
+        lefth = Math.floor(lefttime/(1000*60*60)),  //计算小时数
+        leftm = Math.floor(lefttime/(1000*60)%60),  //计算分钟数
+        lefts = Math.floor(lefttime/1000%60);  //计算秒数
+    var n = (lefth>=10?lefth:"0"+lefth)+":"+(leftm>=10?leftm:"0"+leftm)+":"+(lefts>=10?lefts:"0"+lefts);
+    return "训练赛剩余时间："+n;
+}
+var div = document.getElementById("showtime");
+div.innerHTML = showtime(); ///预先执行一次，显示文字
+setInterval (function () {
+    div.innerHTML = showtime();
+}, 1000);  //反复执行函数本身
+</script>
 
 <script>
   var diff = new Date("<?php echo date("Y/m/d H:i:s")?>").getTime()-new Date().getTime();
