@@ -198,7 +198,7 @@ function print_array($array)
 			<label class="col control-label"><?php echo "比赛编号"?></label>
 				<input type=text name='contest_id' size=71 style="width:600px;" value='<?php echo $contest_id?>'>
 			<br>
-			<text> 注：比赛ID之间用','（英）来分隔 </text>
+			<text> 注：比赛ID之间用','（英）来分隔，仅支持IOI比赛。</text>
 		</p>
 		<?php require_once("../include/set_post_key.php");?>
 		<p>

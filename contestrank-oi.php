@@ -224,7 +224,7 @@ if ($noip) {
       exit(0);
 }
 if(!isset($OJ_RANK_LOCK_PERCENT)) 
-$OJ_RANK_LOCK_PERCENT=1;
+$OJ_RANK_LOCK_PERCENT=1;        
 $lock=$end_time-($end_time-$start_time)*$OJ_RANK_LOCK_PERCENT;
 
 //echo $lock.'-'.date("Y-m-d H:i:s",$lock);

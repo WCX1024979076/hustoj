@@ -302,16 +302,16 @@ else {
 			$wheremy = " and contest_id in ($mycontests)";
 	}
 
-  $sql = "SELECT * FROM `contest` WHERE `defunct`='N' ORDER BY `contest_id` DESC LIMIT 1000";
+  $sql = "SELECT * FROM `contest` WHERE `defunct`='N'  AND `ftraining_date` is not null ORDER BY `contest_id` DESC LIMIT 1000";
 
 	if ($keyword) {
-		$sql = "SELECT *  FROM contest WHERE contest.defunct='N' AND contest.title LIKE ? $wheremy  ORDER BY contest_id DESC";
+		$sql = "SELECT *  FROM contest WHERE contest.defunct='N' AND contest.title LIKE ? $wheremy  AND `ftraining_date` is not null ORDER BY contest_id DESC";
 		$sql .= " limit ".strval($pstart).",".strval($pend); 
 
 		$result = pdo_query($sql,$keyword);
 	}
 	else {
-		$sql = "SELECT *  FROM contest WHERE contest.defunct='N' $wheremy  ORDER BY contest_id DESC";
+		$sql = "SELECT *  FROM contest WHERE contest.defunct='N' $wheremy  AND `ftraining_date` is not null ORDER BY contest_id DESC";
 		$sql .= " limit ".strval($pstart).",".strval($pend); 
 		//echo $sql;
 		$result = mysql_query_cache($sql);

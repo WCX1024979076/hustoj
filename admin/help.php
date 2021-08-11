@@ -90,8 +90,20 @@
       <td><p><?php echo $MSG_HELP_CONTEST_LIST?></p></td>
     </tr>
     <tr>
-      <td><center><a class='btn btn-warning btn-sm' href="contest_add.php" target="main"><b><?php echo $MSG_CONTEST."-".$MSG_ADD?></b></a></center></td>
+      <td><center><a class='btn btn-warning btn-sm' href="contest_add.php" target="main"><b><?php echo "IOI比赛添加"?></b></a></center></td>
       <td><p><?php echo $MSG_HELP_ADD_CONTEST?></p></td>
+    </tr>
+    <tr>
+      <td><center><a class='btn btn-warning btn-sm' href="running_add.php" target="main"><b><?php echo "训练赛添加"?></b></a></center></td>
+      <td><p><?php echo $MSG_HELP_ADD_CONTEST?></p></td>
+    </tr>
+    <tr>
+      <td><center><a class='btn btn-warning btn-sm' href="running2_add.php" target="main"><b><?php echo "补题赛添加"?></b></a></center></td>
+      <td><p><?php echo $MSG_HELP_ADD_CONTEST?></p></td>
+    </tr>
+    <tr>
+      <td><center><a class='btn btn-warning btn-sm' href="running_leave_msg.php" target="main"><b><?php echo "训练赛参与信息"?></b></a></center></td>
+      <td><p><?php echo "查看训练赛参与情况和请假信息。"?></p></td>
     </tr>
     <tr>
       <td><center><a class='btn btn-warning btn-sm' href="user_set_ip.php" target="main"><b><?php echo $MSG_CONTEST."-".$MSG_SET_LOGIN_IP?></b></a></center></td>

@@ -28,6 +28,7 @@ function pdo_query($sql){
 	    }else{
 		$result=$sth->rowCount();
 	    }
+		//var_dump($sth->errorInfo());
 	    //print($sql);
 	    $sth->closeCursor();
 	    return $result;

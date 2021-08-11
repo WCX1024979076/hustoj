@@ -47,6 +47,7 @@ SyntaxHighlighter.config.clipboardSwf = 'highlight/scripts/clipboard.swf';
 SyntaxHighlighter.all();
 </script>
 <?php
+
 if ($ok==true){
 if($view_user_id!=$_SESSION[$OJ_NAME.'_'.'user_id'])
 echo "<a href='mail.php?to_user=".htmlentities($view_user_id,ENT_QUOTES,"UTF-8")."&title=$MSG_SUBMIT $id'>Mail the author</a>";

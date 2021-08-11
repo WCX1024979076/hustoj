@@ -38,7 +38,7 @@ if(stripos($_SERVER['REQUEST_URI'],"template")!==false)exit();
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
             <?php $ACTIVE="class='active'"?>
-
+<!--
             <?php if(!isset($OJ_ON_SITE_CONTEST_ID)){?>
               <li <?php if ($url=="faqs.php") echo " $ACTIVE"; ?>>
                 <a href="<?php echo $path_fix?> faqs.php">
@@ -47,7 +47,7 @@ if(stripos($_SERVER['REQUEST_URI'],"template")!==false)exit();
               </li>
             <?php } else {?>
             <?php }?>
-
+-->
             <?php if (isset($OJ_PRINTER)&& $OJ_PRINTER){ ?>
               <li <?php if ($url=="printer.php") echo " $ACTIVE";?>>
                 <a href="<?php echo $path_fix?>printer.php">
@@ -76,10 +76,21 @@ if(stripos($_SERVER['REQUEST_URI'],"template")!==false)exit();
               <li <?php if ($url=="ranklist.php") echo " $ACTIVE";?>>
                 <a href="<?php echo $path_fix?>ranklist.php"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> <?php echo $MSG_RANKLIST?></a>
               </li>
-              <li <?php if ($url=="contest.php") echo " $ACTIVE";?>>
-                <a href="<?php echo $path_fix?>contest.php"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span> <?php echo $MSG_CONTEST?></a>
+
+              <!-- 增加训练赛，补题赛 -->
+              <li <?php if ($url=="running.php") echo " $ACTIVE";?>>
+                <a href="<?php echo $path_fix?>running.php"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span> <?php echo "训练赛"?></a>
               </li>
 
+              <li <?php if ($url=="running2.php") echo " $ACTIVE";?>>
+                <a href="<?php echo $path_fix?>running2.php"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span> <?php echo "补题赛"?></a>
+              </li>
+
+              <li <?php if ($url=="contest.php") echo " $ACTIVE";?>>
+                <a href="<?php echo $path_fix?>contest.php"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span> <?php echo "IOI比赛"?></a>
+              </li>
+
+              <!-- 结束 -->
               <!--
                 *修改人：王春祥
                 *修改日期：2021/2/18

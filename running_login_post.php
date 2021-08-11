@@ -10,9 +10,11 @@
 	header('content-type:text/html;charset="utf-8"');
     $time=$_POST['time'];
     $cid=(int)$_POST['cid'];
+    $ip = ($_SERVER['REMOTE_ADDR']);
     $now=date('Y-m-d H:i:s', time());  
     $time=$now;                     ///防止恶意提交错误时间到数据库中
     $user_id=$_SESSION[$OJ_NAME.'_'.'user_id'];
-    $sql = "insert into contest_login_time(`user_id`,`contest_id`,`login_time`) values (?,?,?)";
-	$resultsql1 = pdo_query($sql,$user_id,$cid,$time);  
+    $sql = "UPDATE contest_login_time set `login_ip`=?,`login_time`=? where `user_id`=? and `contest_id`=? ";
+	$resultsql1 = pdo_query($sql,$ip,$time,$user_id,$cid);
+    
 ?>

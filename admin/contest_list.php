@@ -50,10 +50,10 @@ $sql = "";
 if(isset($_GET['keyword']) && $_GET['keyword']!=""){
   $keyword = $_GET['keyword'];
   $keyword = "%$keyword%";
-  $sql = "SELECT `contest_id`,`title`,`start_time`,`end_time`,`private`,`defunct`,`training_length`,`ftraining_date` FROM `contest` WHERE (title LIKE ?) OR (description LIKE ?) ORDER BY `contest_id` DESC";
+  $sql = "SELECT `contest_id`,`title`,`start_time`,`end_time`,`private`,`defunct`,`training_length`,`ftraining_date`,`training_id` FROM `contest` WHERE (title LIKE ?) OR (description LIKE ?) ORDER BY `contest_id` DESC";
   $result = pdo_query($sql,$keyword,$keyword);
 }else{
-  $sql = "SELECT `contest_id`,`title`,`start_time`,`end_time`,`private`,`defunct`,`training_length`,`ftraining_date` FROM `contest` ORDER BY `contest_id` DESC LIMIT $sid, $idsperpage";
+  $sql = "SELECT `contest_id`,`title`,`start_time`,`end_time`,`private`,`defunct`,`training_length`,`ftraining_date`,`training_id` FROM `contest` ORDER BY `contest_id` DESC LIMIT $sid, $idsperpage";
   $result = pdo_query($sql);
 }
 //结束
@@ -111,8 +111,24 @@ if(isset($_GET['keyword']) && $_GET['keyword']!=""){
       if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'."m$cid"])){
         echo "<td><a href=contest_pr_change.php?cid=".$row['contest_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".($row['private']=="0"?"<span class=green>Public</span>":"<span class=red>Private<span>")."</a></td>";
         echo "<td><a href=contest_df_change.php?cid=".$row['contest_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey'].">".($row['defunct']=="N"?"<span class=green>Available</span>":"<span class=red>Reserved</span>")."</a></td>";
-        echo "<td><a href=contest_edit.php?cid=".$row['contest_id'].">Edit</a></td>";
-        echo "<td><a href=contest_add.php?cid=".$row['contest_id'].">Copy</a></td>";
+        if($row['ftraining_date']!=null)
+        {
+          echo "<td><a href=contest_edit.php?cid=".$row['contest_id'].">Edit</a></td>";
+          echo "<td><a href=contest_add.php?cid=".$row['contest_id'].">Copy</a></td>";
+        }
+        else
+        {
+          if($row['training_id']==null)
+          {
+          echo "<td><a href=running_edit.php?cid=".$row['contest_id'].">Edit</a></td>";
+          echo "<td><a href=running_add.php?cid=".$row['contest_id'].">Copy</a></td>";
+          }
+          else
+          {
+          echo "<td><a href=running2_edit.php?cid=".$row['contest_id'].">Edit</a></td>";
+          echo "<td><a href=running2_add.php?cid=".$row['contest_id'].">Copy</a></td>";
+          }
+        }
         if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])){
           echo "<td><a href=\"problem_export_xml.php?cid=".$row['contest_id']."&getkey=".$_SESSION[$OJ_NAME.'_'.'getkey']."\">Export</a></td>";
         }else{
