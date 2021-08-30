@@ -106,15 +106,6 @@ else if (isset($_GET['cid']) && isset($_GET['pid'])) {
 	//结束
 	$co_flag = true;
 }
-else if (isset($_GET['level_id']) && isset($_GET['problem_id'])) {
-	//段位赛
-	$level_id = intval($_GET['level_id']);
-	$problem_id = intval($_GET['problem_id']);
-	$sql = "SELECT * FROM `problem` WHERE `problem_id`=?";
-	$result = pdo_query($sql,$problem_id);
-	$level_flag = true;
-	$co_flag = true;
-}
 else {
 	$view_errors="<title>$MSG_NO_SUCH_PROBLEM</title><h2>$MSG_NO_SUCH_PROBLEM</h2>";
 	require("template/".$OJ_TEMPLATE."/error.php");

@@ -73,7 +73,7 @@ static  $OJ_BEIAN=false;  // 如果有备案号，填写备案号
 //static  $OJ_ON_SITE_CONTEST_ID=1000; //启用现场赛状态，填写现场赛比赛ID
 
 /* share code */
-static  $OJ_SHARE_CODE=false; // 代码分享功能
+static  $OJ_SHARE_CODE=true; // 代码分享功能
 /* recent contest */
 static  $OJ_RECENT_CONTEST=true; // "http://algcontest.rainng.com/contests.json" ; // 名校联赛
 

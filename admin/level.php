@@ -34,7 +34,7 @@
   require_once('../include/my_func.inc.php');
   require_once('../include/const.inc.php');
   require_once('../include/setlang.php');
-  if (!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])||isset($_SESSION[$OJ_NAME.'_'.'problem_editor'])||isset($_SESSION[$OJ_NAME.'_'.'password_setter']))){
+  if(!(isset($_SESSION[$OJ_NAME.'_'.'administrator'])||isset($_SESSION[$OJ_NAME.'_'.'contest_creator']))){
     echo "<a href='../loginpage.php'>Please Login First!</a>";
     exit(1);
   }
@@ -50,25 +50,9 @@
     $tem_arr['level_id']=$row['level_id'];
     $tem_arr['level_name']=$row['level_name'];
     $tem_arr['level_problem_min']=$row['level_problem_min'];
-    $plist = "";
-    $sql = "SELECT `problem_id` FROM `level_problem` WHERE `level_id`=? and `type`=1 ORDER BY `num`";
-    $result_easy=pdo_query($sql,$row['level_id']);
-    foreach($result_easy as $row_easy){
-        if($plist) $plist .= ",";
-        $plist.=$row_easy[0];
-    }
-    $tem_arr['easy_pro']=$plist;
-
-    $plist = "";
-    $sql = "SELECT `problem_id` FROM `level_problem` WHERE `level_id`=? and `type`=2 ORDER BY `num`";
-    $result_hard=pdo_query($sql,$row['level_id']);
-
-    foreach($result_hard as $row_hard){
-        if($plist) $plist .= ",";
-        $plist.=$row_hard[0];
-    }
-    $tem_arr['hard_pro']=$plist;
-
+    $tem_arr['easy_cid']=$row['easy_cid'];
+    $tem_arr['hard_cid']=$row['hard_cid'];
+    
     $td_array[]=$tem_arr;
   }
 ?>
@@ -114,12 +98,12 @@
 
                                 </tr>
                                 <tr>
-									<td class="tb_bg"><label for="">段位基础题目列表</label></td>
-                                    <td><input type="text" placeholder="请输入段位基本题目列表"/></td>
+									<td class="tb_bg"><label for="">段位基础题目比赛编号</label></td>
+                                    <td><input type="text" placeholder="请输入段位基本题目比赛编号"/></td>
                                 </tr>
 								<tr>
-									<td class="tb_bg"><label for="">段位拓展题目列表</label></td>
-                                    <td><input type="text" placeholder="请输入段位拓展题目列表"/></td>
+									<td class="tb_bg"><label for="">段位拓展题目比赛编号</label></td>
+                                    <td><input type="text" placeholder="请输入段位拓展题目比赛编号"/></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -139,8 +123,8 @@
                 <th>段位等级</th>
                 <th>段位名称</th>
                 <th>最低题目要求</th>
-                <th>基础题目</th>
-                <th>拓展题目</th>
+                <th>基础题目比赛编号</th>
+                <th>拓展题目比赛编号</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -152,8 +136,8 @@
                   echo "<td>".$row_td['level_id']."</td>";
                   echo "<td>".$row_td['level_name']."</td>";
                   echo "<td>".$row_td['level_problem_min']."</td>";
-                  echo "<td>".$row_td['easy_pro']."</td>";
-                  echo "<td>".$row_td['hard_pro']."</td>";
+                  echo "<td>".$row_td['easy_cid']."</td>";
+                  echo "<td>".$row_td['hard_cid']."</td>";
                   echo '<td> <a href="#" class="edit">编辑</a> <a href="#" class="del">删除</a></td>';
                   echo "</tr>";
                 }

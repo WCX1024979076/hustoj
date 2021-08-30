@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 修改人：王春祥
-	修改日期：2021/1/19
-	修改目的：修改榜单
--->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -145,14 +141,11 @@
 
 					$now = time();
 					$start_time = strtotime($row['start_time']);
-					$trainging_length=$row['trainging_length'];
-					$ftraining_date=strtotime($row['ftraining_date']);
 					$end_time = strtotime($row['end_time']);
 					$view_description = $row['description'];
 					$view_title = $row['title'];
 					$view_start_time = $row['start_time'];
 					$view_end_time = $row['end_time'];
-
 				}
 			}
 			?>
@@ -217,15 +210,11 @@
 				<div class="btn-group">
 					<a href="contest.php?cid=<?php echo $cid?>" class="btn btn-primary btn-sm"><?php echo $MSG_PROBLEMS?></a>
 					<a href="status.php?cid=<?php echo $view_cid?>" class="btn btn-primary btn-sm"><?php echo $MSG_SUBMIT?></a>
-					<!--
 					<a href="contestrank.php?cid=<?php echo $view_cid?>" class="btn btn-primary btn-sm"><?php echo $MSG_STANDING?></a>
-					-->
-					<?php 
-					if($now>$ftraining_date)
-					echo '<a href="conteststatistics.php?cid='.$view_cid.'" class="btn btn-primary btn-sm">'.$MSG_STATISTICS.'</a>';
-					?>
-          <a href="suspect_list.php?cid=<?php echo $view_cid?>" class="btn btn-warning btn-sm"><?php echo $MSG_IP_VERIFICATION?></a>
+					<a href="contestrank-oi.php?cid=<?php echo $view_cid?>" class="btn btn-primary btn-sm"><?php echo "OI".$MSG_STANDING?></a>
+					<a href="conteststatistics.php?cid=<?php echo $view_cid?>" class="btn btn-primary btn-sm"><?php echo $MSG_STATISTICS?></a>
         <?php if(isset($_SESSION[$OJ_NAME.'_'.'administrator']) || isset($_SESSION[$OJ_NAME.'_'.'contest_creator'])) {?>
+          <a href="suspect_list.php?cid=<?php echo $view_cid?>" class="btn btn-warning btn-sm"><?php echo $MSG_IP_VERIFICATION?></a>
           <a href="user_set_ip.php?cid=<?php echo $view_cid?>" class="btn btn-success btn-sm"><?php echo $MSG_SET_LOGIN_IP?></a>
           <a target="_blank" href="../../admin/contest_edit.php?cid=<?php echo $view_cid?>" class="btn btn-success btn-sm"><?php echo "EDIT"?></a>
 	        <?php } ?>
@@ -319,52 +308,36 @@
 						echo "<td class='text-center'><a href=userinfo.php?user=$uuid>".htmlentities($U[$i]->nick,ENT_QUOTES,"UTF-8")."</a></td>";
 
 						$usolved = $U[$i]->solved;
-						$ufsolved = $U[$i]->fsolved;
-						echo "<td class='text-center'><a href=status.php?user_id=$uuid&cid=$cid>$usolved(".$ufsolved.")</a></td>";
+						echo "<td class='text-center'><a href=status.php?user_id=$uuid&cid=$cid>$usolved</a></td>";
 
 						echo "<td class='text-center'>".sec2str($U[$i]->time)."</td>";
-						echo "<td class='text-center'>".$U[$i]->total."(".$U[$i]->all_total.")</td>";
+						echo "<td class='text-center'>".($U[$i]->total)."</td>";
 
 
 						for ($j=0; $j<$pid_cnt; $j++) {
 							$bg_color = "eeeeee";
-							if (isset($U[$i]->p_ac_sec[$j])&&$U[$i]->p_ac_sec[$j]>0) ///AC，绿色减淡
-							{  
+							if (isset($U[$i]->p_ac_sec[$j])&&$U[$i]->p_ac_sec[$j]>0){
 								$aa = 0x33+$U[$i]->p_wa_num[$j]*32;
 								$aa = $aa>0xaa?0xaa:$aa;
 								$aa = dechex($aa);
 								$bg_color = "$aa"."ff"."$aa";
 								//$bg_color="aaffaa";
-								//if ($uuid==$first_blood[$j]) 
-								//{
-								//	$bg_color = "aaaaff";
-								//}
+								if ($uuid==$first_blood[$j]) {
+									$bg_color = "aaaaff";
+								}
 							}
-							else if (isset($U[$i]->fp_ac_sec[$j])&&$U[$i]->fp_ac_sec[$j]>0) ///补题赛AC，绿色减淡
-							{  
-								$bg_color = "FFFF00";
-							}
-							else if(isset($U[$i]->p_wa_num[$j]) && $U[$i]->p_wa_num[$j]>0) { ///WA 红色
+							else if(isset($U[$i]->p_wa_num[$j]) && $U[$i]->p_wa_num[$j]>0) {
 								$aa = 0xaa-$U[$i]->p_wa_num[$j]*10;
 								$aa = $aa>16?$aa:16;
 								$aa = dechex($aa);
 								$bg_color = "ff$aa$aa";
 							}
 							echo "<td class='well' style='background-color:#$bg_color'>";
-							if (isset($U[$i])) 
-							{
-								if(isset($U[intval($i)]->fp_pass_rate[intval($j)])&&isset($U[intval($i)]->p_pass_rate[intval($j)]))
-									echo (floatval($U[intval($i)]->p_pass_rate[intval($j)])*100)."(".(floatval($U[intval($i)]->fp_pass_rate[intval($j)])*100).")";
-								else if (isset($U[intval($i)]->fp_pass_rate[intval($j)])&&!isset($U[intval($i)]->p_pass_rate[intval($j)]))
-									echo "0"."(".(floatval($U[intval($i)]->fp_pass_rate[intval($j)])*100).")";
-								//if($U[$i]->p_wa_num[$j]!=0)
-								 //   echo "(-".$U[$i]->p_wa_num[$j].")";
-								/*
+							if (isset($U[$i])) {
 								if (isset($U[$i]->p_ac_sec[$j]) && $U[$i]->p_ac_sec[$j]>0)
-									echo "100(100)";
+									echo sec2str($U[$i]->p_ac_sec[$j]);
 								else if (isset($U[$i]->p_wa_num[$j]) && intval($U[$i]->p_wa_num[$j])>0 && isset($U[$i]->p_pass_rate[$j]))
-									   echo "(+".(floatval($U[intval($i)]->p_pass_rate[intval($j)])*100).")";
-								*/
+           				echo "(+".(floatval($U[intval($i)]->p_pass_rate[intval($j)])*100).")";
 							}
 						}
 						echo "</tr>\n";

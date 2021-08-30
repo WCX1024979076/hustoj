@@ -57,7 +57,6 @@
 <?php if (isset($_SESSION[$OJ_NAME.'_'.'administrator'])){?>
       <a class="dropdown-item btn-sm" href="privilege_list.php" target="main" title="<?php echo $MSG_HELP_PRIVILEGE_LIST?>"><b><?php echo $MSG_USER."-".$MSG_PRIVILEGE."-".$MSG_LIST?></b></a>
       <a class="dropdown-item btn-sm" href="privilege_add.php" target="main" title="<?php echo $MSG_HELP_ADD_PRIVILEGE?>"><b><?php echo $MSG_USER."-".$MSG_PRIVILEGE."-".$MSG_ADD?></b></a>
-      <a class="dropdown-item btn-sm" href="level.php" target="main" title="<?php echo "进行段位管理"?>"><b><?php echo "段位管理"?></b></a>
 
 <?php }?>
     </div>
@@ -96,6 +95,8 @@
       <a class="dropdown-item btn-sm" href="team_generate2.php" target="main" title="<?php echo $MSG_HELP_TEAMGENERATOR?>"><b><?php echo $MSG_CONTEST."-".$MSG_TEAMGENERATOR?></b></a>
       <!--  在此引入-->
       <a class="dropdown-item btn-sm" href="DataAnalysis.php" target="main" title="<?php echo $MSG_HELP_TEAMGENERATOR?>"><b><?php echo "队员做题数据分析"?></b></a>
+      <a class="dropdown-item btn-sm" href="level.php" target="main" title="<?php echo "进行段位管理"?>"><b><?php echo "段位管理"?></b></a>
+
 <?php }?>
     </div>
   </div>
