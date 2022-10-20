@@ -10,64 +10,131 @@ require_once "./include/const.inc.php";
 require_once "./include/my_func.inc.php";
 class TM
 {
-    public $solved = 0;
+    public $solved = 0; ///训练赛ac题目
+    public $fsolved = 0; ///补题赛ac题目
     public $time = 0;
     public $p_wa_num;
-    public $p_ac_sec;
-    public $p_pass_rate;
+    public $fp_wa_num;
+    public $p_ac_sec; ///训练赛ac题目
+    public $p_pass_rate; ///训练赛的ac率
+    public $fp_ac_sec; ///补题赛ac题目
+    public $fp_pass_rate; ///补题赛的ac率
     public $user_id;
     public $nick;
-    public $total;
+    ///改
+    public $total; //训练赛成绩
+    public $all_total; //训练赛+补题赛成绩
     public function TM()
     {
         $this->solved = 0;
+        $this->fsolved = 0;
         $this->time = 0;
-        $this->p_wa_num = array(0);
-        $this->p_ac_sec = array(0);
-        $this->p_pass_rate = array(0);
+        $this->p_wa_num = array();
+        $this->fp_wa_num = array();
+        $this->p_ac_sec = array();
+        $this->p_pass_rate = array();
+        $this->fp_ac_sec = array();
+        $this->fp_pass_rate = array();
         $this->total = 0;
+        $this->all_total = 0;
     }
-    public function Add($pid, $sec, $res)
+    public function Add($pid, $sec, $res, $is_training)
     {
-//              echo "Add $pid $sec $res<br>";
+        //echo $ftraining_date;
+        //              echo "Add $pid $sec $res<br>";
         if (isset($this->p_ac_sec[$pid]) && $this->p_ac_sec[$pid] > 0) {
             return;
         }
 
-        if ($res * 100 < 99) {
-            if (isset($this->p_pass_rate[$pid])) {
-                if ($res > $this->p_pass_rate[$pid]) {
-                    $this->total -= $this->p_pass_rate[$pid] * 100;
+        if (isset($this->fp_ac_sec[$pid]) && $this->fp_ac_sec[$pid] > 0) {
+            return;
+        }
+
+        if ($is_training) ///在训练赛
+        {
+            if ($res * 100 < 99) {
+                if (isset($this->p_pass_rate[$pid])) {
+                    if ($res > $this->p_pass_rate[$pid]) {
+                        $this->total -= $this->p_pass_rate[$pid] * 100;
+                        $this->p_pass_rate[$pid] = $res;
+
+                        $this->all_total -= $this->fp_pass_rate[$pid];
+                        $this->fp_pass_rate[$pid] = max($this->fp_pass_rate[$pid], $res);
+                        $this->all_total += $this->fp_pass_rate[$pid];
+
+                        $this->total += $this->p_pass_rate[$pid] * 100;
+                    }
+                } else {
                     $this->p_pass_rate[$pid] = $res;
-                    $this->total += $this->p_pass_rate[$pid] * 100;
+                    $this->total += $res * 100;
+                    
+                    $this->all_total -= $this->fp_pass_rate[$pid];
+                    $this->fp_pass_rate[$pid] = max($this->fp_pass_rate[$pid], $res);
+                    $this->all_total += $this->fp_pass_rate[$pid];
+                }
+                if (isset($this->p_wa_num[$pid])) {
+                    $this->p_wa_num[$pid]++;
+                } else {
+                    $this->p_wa_num[$pid] = 1;
+                }
+
+            } else {
+                $this->p_ac_sec[$pid] = 1;
+                $this->solved++;
+                $this->fsolved = $this->solved;
+                if (!isset($this->p_wa_num[$pid])) {
+                    $this->p_wa_num[$pid] = 0;
+                }
+
+                if (isset($this->p_pass_rate[$pid])) {
+                    $this->total -= $this->p_pass_rate[$pid] * 100;
+                    $this->all_total -= $this->p_pass_rate[$pid] * 100;
+                } else {
+                  $this->fp_pass_rate[$pid] = $this->p_pass_rate[$pid] = $res;
+                }
+                $this->p_pass_rate[$pid] = $this->fp_pass_rate[$pid] = 1;
+                $this->total += 100;
+                $this->all_total += 100;
+                $this->time += $sec + $this->p_wa_num[$pid] * 1200;
+
+                // echo "Time:".$this->login_date."<br>";
+                //                      echo "Solved:".$this->solved."<br>";
+            }
+        } else ///在补题赛
+        {
+            if ($res * 100 < 99) {
+                if (isset($this->fp_pass_rate[$pid])) {
+                    if ($res > $this->fp_pass_rate[$pid]) {
+                        $this->all_total -= $this->fp_pass_rate[$pid] * 100;
+                        $this->fp_pass_rate[$pid] = max($this->fp_pass_rate[$pid], $res);
+                        $this->all_total += $this->fp_pass_rate[$pid] * 100;
+                    }
+                } else {
+                    $this->fp_pass_rate[$pid] = $res;
+                    $this->all_total += $res * 100;
+                }
+                if (isset($this->p_wa_num[$pid])) {
+                    $this->fp_wa_num[$pid]++;
+                } else {
+                    $this->fp_wa_num[$pid] = 1;
                 }
             } else {
-                $this->p_pass_rate[$pid] = $res;
-                $this->total += $res * 100;
-            }
-            if (isset($this->p_wa_num[$pid])) {
-                $this->p_wa_num[$pid]++;
-            } else {
-                $this->p_wa_num[$pid] = 1;
-            }
+                $this->fp_ac_sec[$pid] = 1;
+                $this->fsolved++;
+                if (!isset($this->p_wa_num[$pid])) {
+                    $this->fp_wa_num[$pid] = 0;
+                }
 
-        } else {
-            $this->p_ac_sec[$pid] = $sec;
-            $this->solved++;
-            if (!isset($this->p_wa_num[$pid])) {
-                $this->p_wa_num[$pid] = 0;
+                if (isset($this->fp_pass_rate[$pid])) {
+                    $this->all_total -= $this->fp_pass_rate[$pid] * 100;
+                } else {
+                    $this->fp_pass_rate[$pid] = $res;
+                }
+                $this->fp_pass_rate[$pid] = 1;
+                $this->all_total += 100;
+                //echo "Time:".$this->time."<br>";
             }
-
-            if (isset($this->p_pass_rate[$pid])) {
-                $this->total -= $this->p_pass_rate[$pid] * 100;
-            } else {
-                $this->p_pass_rate[$pid] = $res;
-            }
-
-            $this->total += 100;
-            $this->time += $sec + $this->p_wa_num[$pid] * 1200;
-//                      echo "Time:".$this->time."<br>";
-            //                      echo "Solved:".$this->solved."<br>";
+            //echo "Solved:".$this->all_total."<br>";
         }
     }
 }
@@ -199,7 +266,37 @@ if ($OJ_MEMCACHE) {
 // $row=$result[0];
 $pid_cnt = intval($row['pbc']);
 
-require "./include/contest_solutions.php";
+$fcid = $cid;
+$cid = $cid ^ 1;
+
+if ($OJ_MEMCACHE) {
+    $sql = "SELECT
+      user_id,nick,solution.result,solution.num,solution.in_date,solution.pass_rate,solution.contest_id
+              FROM
+                 solution where (solution.contest_id='$cid' or solution.contest_id='$fcid') and num>=0 and problem_id>0
+      ORDER BY user_id,solution_id";
+    $result = mysql_query_cache($sql);
+    if ($result) {
+        $rows_cnt = count($result);
+    } else {
+        $rows_cnt = 0;
+    }
+
+} else {
+    $sql = "SELECT
+      user_id,nick,solution.result,solution.num,solution.in_date,solution.pass_rate,solution.contest_id
+              FROM
+                 solution where (solution.contest_id=? or solution.contest_id=?) and num>=0 and problem_id>0
+      ORDER BY user_id,solution_id";
+    $result = pdo_query($sql, $cid, $fcid);
+    if ($result) {
+        $rows_cnt = count($result);
+    } else {
+        $rows_cnt = 0;
+    }
+
+}
+
 //echo $sql;
 //$result=pdo_query($sql);
 
@@ -209,7 +306,6 @@ $U = array();
 for ($i = 0; $i < $rows_cnt; $i++) {
 
     $row = $result[$i];
-
     $n_user = $row['user_id'];
     if (strcmp($user_name, $n_user)) {
         $user_cnt++;
@@ -225,47 +321,15 @@ for ($i = 0; $i < $rows_cnt; $i++) {
     }
 
     if (time() < $end_time + $OJ_RANK_LOCK_DELAY && $lock < strtotime($row['in_date'])) {
-        $U[$user_cnt]->Add($row['num'], strtotime($row['in_date']) - $start_time, 0);
+        $U[$user_cnt]->Add($row['num'], strtotime($row['in_date']) - $start_time, 0, $row[contest_id] == $cid);
     } else {
-        $U[$user_cnt]->Add($row['num'], strtotime($row['in_date']) - $start_time, $row['pass_rate']);
+        $U[$user_cnt]->Add($row['num'], strtotime($row['in_date']) - $start_time, $row['pass_rate'], $row[contest_id] == $cid);
     }
-
 }
 usort($U, "s_cmp");
 
-////firstblood
-$first_blood = array();
-for ($i = 0; $i < $pid_cnt; $i++) {
-    $first_blood[$i] = "";
-}
-
-if ($OJ_MEMCACHE) {
-    $sql = "select s.num,s.user_id from solution s ,
-        (select num,min(solution_id) minId from solution where contest_id=$cid and result=4 GROUP BY num ) c where s.solution_id = c.minId";
-    $fb = mysql_query_cache($sql);
-    if ($fb) {
-        $rows_cnt = count($fb);
-    } else {
-        $rows_cnt = 0;
-    }
-
-} else {
-    $sql = "select s.num,s.user_id from solution s ,
-        (select num,min(solution_id) minId from solution where contest_id=? and result=4 GROUP BY num ) c where s.solution_id = c.minId";
-    $fb = pdo_query($sql, $cid);
-    if ($fb) {
-        $rows_cnt = count($fb);
-    } else {
-        $rows_cnt = 0;
-    }
-
-}
-foreach ($fb as $row) {
-    $first_blood[$row['num']] = $row['user_id'];
-}
-
 /////////////////////////Template
-require "template/" . $OJ_TEMPLATE . "/contestrank-oi.php";
+require "template/" . $OJ_TEMPLATE . "/contestrank-oi-1.php";
 /////////////////////////Common foot
 if (file_exists('./include/cache_end.php')) {
     require_once './include/cache_end.php';
