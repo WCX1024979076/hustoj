@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <!-- 修改人：王春祥
-	修改日期：2021/1/19
-	修改目的：修改榜单
+	修改日期：2021/10/20
+	修改目的：尝试合并训练赛和补题赛榜单
 -->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
