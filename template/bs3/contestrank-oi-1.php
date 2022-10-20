@@ -97,62 +97,62 @@ function formatTimeLength($length)
 		<div class="jumbotron">
 
 			<?php
-if (isset($_GET['cid'])) {
-    $cid = intval($_GET['cid']);
-    $view_cid = $cid;
-    //print $cid;
+            if (isset($_GET['cid'])) {
+                $cid = intval($_GET['cid']);
+                $view_cid = $cid;
+                //print $cid;
 
-    //check contest valid
-    $sql = "SELECT * FROM `contest` WHERE `contest_id`=?";
-    $result = pdo_query($sql, $cid);
+                //check contest valid
+                $sql = "SELECT * FROM `contest` WHERE `contest_id`=?";
+                $result = pdo_query($sql, $cid);
 
-    $rows_cnt = count($result);
-    $contest_ok = true;
-    $password = "";
+                $rows_cnt = count($result);
+                $contest_ok = true;
+                $password = "";
 
-    if (isset($_POST['password'])) {
-        $password = $_POST['password'];
-    }
+                if (isset($_POST['password'])) {
+                    $password = $_POST['password'];
+                }
 
-    if (get_magic_quotes_gpc()) {
-        $password = stripslashes($password);
-    }
+                if (get_magic_quotes_gpc()) {
+                    $password = stripslashes($password);
+                }
 
-    if ($rows_cnt == 0) {
-        $view_title = "比赛已经关闭!";
-    } else {
-        $row = $result[0];
-        $view_private = $row['private'];
+                if ($rows_cnt == 0) {
+                    $view_title = "比赛已经关闭!";
+                } else {
+                    $row = $result[0];
+                    $view_private = $row['private'];
 
-        if ($password != "" && $password == $row['password']) {
-            $_SESSION[$OJ_NAME . '_' . 'c' . $cid] = true;
-        }
+                    if ($password != "" && $password == $row['password']) {
+                        $_SESSION[$OJ_NAME . '_' . 'c' . $cid] = true;
+                    }
 
-        if ($row['private'] && !isset($_SESSION[$OJ_NAME . '_' . 'c' . $cid])) {
-            $contest_ok = false;
-        }
+                    if ($row['private'] && !isset($_SESSION[$OJ_NAME . '_' . 'c' . $cid])) {
+                        $contest_ok = false;
+                    }
 
-        if ($row['defunct'] == 'Y') {
-            $contest_ok = false;
-        }
+                    if ($row['defunct'] == 'Y') {
+                        $contest_ok = false;
+                    }
 
-        if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
-            $contest_ok = true;
-        }
+                    if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
+                        $contest_ok = true;
+                    }
 
-        $now = time();
-        $start_time = strtotime($row['start_time']);
-        $trainging_length = $row['trainging_length'];
-        $ftraining_date = strtotime($row['ftraining_date']);
-        $end_time = strtotime($row['end_time']);
-        $view_description = $row['description'];
-        $view_title = $row['title'];
-        $view_start_time = $row['start_time'];
-        $view_end_time = $row['end_time'];
+                    $now = time();
+                    $start_time = strtotime($row['start_time']);
+                    $trainging_length = $row['trainging_length'];
+                    $ftraining_date = strtotime($row['ftraining_date']);
+                    $end_time = strtotime($row['end_time']);
+                    $view_description = $row['description'];
+                    $view_title = $row['title'];
+                    $view_start_time = $row['start_time'];
+                    $view_end_time = $row['end_time'];
 
-    }
-}
-?>
+                }
+            }
+            ?>
 
 			<?php if (isset($_GET['cid'])) {?>
 			<center>
@@ -170,41 +170,41 @@ if (isset($_GET['cid'])) {
 				<?php }?>
 
 				<?php if ($now > $end_time) {
-    echo "<span class=text-muted>$MSG_Ended</span>";
-} else if ($now < $start_time) {
-    echo "<span class=text-success>$MSG_Start&nbsp;</span>";
-    echo "<span class=text-success>$MSG_TotalTime</span>" . " " . formatTimeLength($end_time - $start_time);
-} else {
-    echo "<span class=text-danger>$MSG_Running</span>&nbsp;";
-    echo "<span class=text-danger>$MSG_LeftTime</span>" . " " . formatTimeLength($end_time - $now);
-}
-    ?>
+                    echo "<span class=text-muted>$MSG_Ended</span>";
+                } else if ($now < $start_time) {
+                    echo "<span class=text-success>$MSG_Start&nbsp;</span>";
+                    echo "<span class=text-success>$MSG_TotalTime</span>" . " " . formatTimeLength($end_time - $start_time);
+                } else {
+                    echo "<span class=text-danger>$MSG_Running</span>&nbsp;";
+                    echo "<span class=text-danger>$MSG_LeftTime</span>" . " " . formatTimeLength($end_time - $now);
+                }
+                    ?>
 
 				<br><br>
 
 				<?php echo $MSG_CONTEST_STATUS ?> :
 
 				<?php
-if ($now > $end_time) {
-        echo "<span class=text-muted>" . $MSG_End . "</span>";
-    } else if ($now < $start_time) {
-        echo "<span class=text-success>" . $MSG_Start . "</span>";
-    } else {
-        echo "<span class=text-danger>" . $MSG_Running . "</span>";
-    }
+                if ($now > $end_time) {
+                        echo "<span class=text-muted>" . $MSG_End . "</span>";
+                    } else if ($now < $start_time) {
+                        echo "<span class=text-success>" . $MSG_Start . "</span>";
+                    } else {
+                        echo "<span class=text-danger>" . $MSG_Running . "</span>";
+                    }
 
-    ?>
-				&nbsp;&nbsp;
+                    ?>
+                                &nbsp;&nbsp;
 
-				<?php echo $MSG_CONTEST_OPEN ?> :
+                                <?php echo $MSG_CONTEST_OPEN ?> :
 
-				<?php if ($view_private == '0') {
-        echo "<span class=text-primary>" . $MSG_Public . "</span>";
-    } else {
-        echo "<span class=text-danger>" . $MSG_Private . "</span>";
-    }
+                                <?php if ($view_private == '0') {
+                        echo "<span class=text-primary>" . $MSG_Public . "</span>";
+                    } else {
+                        echo "<span class=text-danger>" . $MSG_Private . "</span>";
+                    }
 
-    ?>
+                    ?>
 
 				<br>
 
@@ -220,11 +220,11 @@ if ($now > $end_time) {
 					<a href="contestrank.php?cid=<?php echo $view_cid ?>" class="btn btn-primary btn-sm"><?php echo $MSG_STANDING ?></a>
 					-->
 					<?php
-if ($now > $ftraining_date) {
-        echo '<a href="conteststatistics.php?cid=' . $view_cid . '" class="btn btn-primary btn-sm">' . $MSG_STATISTICS . '</a>';
-    }
+                    if ($now > $ftraining_date) {
+                            echo '<a href="conteststatistics.php?cid=' . $view_cid . '" class="btn btn-primary btn-sm">' . $MSG_STATISTICS . '</a>';
+                        }
 
-    ?>
+                        ?>
           <a href="suspect_list.php?cid=<?php echo $view_cid ?>" class="btn btn-warning btn-sm"><?php echo $MSG_IP_VERIFICATION ?></a>
         <?php if (isset($_SESSION[$OJ_NAME . '_' . 'administrator']) || isset($_SESSION[$OJ_NAME . '_' . 'contest_creator'])) {?>
           <a href="user_set_ip.php?cid=<?php echo $view_cid ?>" class="btn btn-success btn-sm"><?php echo $MSG_SET_LOGIN_IP ?></a>
@@ -237,26 +237,26 @@ if ($now > $ftraining_date) {
 
 			<br>
 			<?php
-$rank = 1;
-?>
-			<center>
-				<a href="contestrank.xls.php?cid=<?php echo $cid ?>" >Download</a>
-				<h4><?php if (isset($locked_msg)) {
-    echo $locked_msg;
-}
-?></h4>
+                $rank = 1;
+                ?>
+                            <center>
+                                <a href="contestrank.xls.php?cid=<?php echo $cid ?>" >Download</a>
+                                <h4><?php if (isset($locked_msg)) {
+                    echo $locked_msg;
+                }
+                ?></h4>
 				<?php
-if ($OJ_MEMCACHE) {
-    if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
-        echo ' | <a href="contestrank3.php?cid=' . $cid . '">滚榜</a>';
+                    if ($OJ_MEMCACHE) {
+                        if (isset($_SESSION[$OJ_NAME . '_' . 'administrator'])) {
+                            echo ' | <a href="contestrank3.php?cid=' . $cid . '">滚榜</a>';
 
-        if ($OJ_MEMCACHE) {
-            echo '<a href="contestrank2.php?cid=' . $cid . '">Replay</a>';
-        }
+                            if ($OJ_MEMCACHE) {
+                                echo '<a href="contestrank2.php?cid=' . $cid . '">Replay</a>';
+                            }
 
-    }
-}
-?>
+                        }
+                    }
+                    ?>
 			</center>
 
       <table id="rank" class="table-hover table-striped" align=center width=80%>
@@ -269,33 +269,33 @@ if ($OJ_MEMCACHE) {
             <td class='text-center'><?php echo $MSG_CONTEST_PENALTY ?></td>
 						<td class='text-center'><?php echo "Mark" ?></td>
 							<?php
-for ($i = 0; $i < $pid_cnt; $i++) {
-    if (time() < $end_time) { //during contest/exam time
-        echo "<td class='text-center'><a href=problem.php?cid=$cid&pid=$i>$PID[$i]</a></td>";
-    } else { //over contest/exam time
+                            for ($i = 0; $i < $pid_cnt; $i++) {
+                                if (time() < $end_time) { //during contest/exam time
+                                    echo "<td class='text-center'><a href=problem.php?cid=$cid&pid=$i>$PID[$i]</a></td>";
+                                } else { //over contest/exam time
 
-        //check the problem will be use remained contest/exam
-        $sql = "SELECT `problem_id` FROM `contest_problem` WHERE (`contest_id`=? AND `num`=?)";
-        $tresult = pdo_query($sql, $cid, $i);
+                                    //check the problem will be use remained contest/exam
+                                    $sql = "SELECT `problem_id` FROM `contest_problem` WHERE (`contest_id`=? AND `num`=?)";
+                                    $tresult = pdo_query($sql, $cid, $i);
 
-        $tpid = $tresult[0][0];
-        $sql = "SELECT `problem_id` FROM `problem` WHERE `problem_id`=? AND `problem_id` IN (
-				          SELECT `problem_id` FROM `contest_problem` WHERE `contest_id` IN (
-				            SELECT `contest_id` FROM `contest` WHERE (`defunct`='N' AND now()<`end_time`)
-				          )
-				        )";
-        $tresult = pdo_query($sql, $tpid);
+                                    $tpid = $tresult[0][0];
+                                    $sql = "SELECT `problem_id` FROM `problem` WHERE `problem_id`=? AND `problem_id` IN (
+                                                    SELECT `problem_id` FROM `contest_problem` WHERE `contest_id` IN (
+                                                        SELECT `contest_id` FROM `contest` WHERE (`defunct`='N' AND now()<`end_time`)
+                                                    )
+                                                    )";
+                                    $tresult = pdo_query($sql, $tpid);
 
-        if (intval($tresult) != 0) //if the problem will be use remained contes/exam */
-        {
-            echo "<td class='text-center'>$PID[$i]</td>";
-        } else {
-            echo "<td class='text-center'><a href='problem.php?id=" . $tpid . "'>" . $PID[$i] . "</a></td>";
-        }
+                                    if (intval($tresult) != 0) //if the problem will be use remained contes/exam */
+                                    {
+                                        echo "<td class='text-center'>$PID[$i]</td>";
+                                    } else {
+                                        echo "<td class='text-center'><a href='problem.php?id=" . $tpid . "'>" . $PID[$i] . "</a></td>";
+                                    }
 
-    }
-}
-?>
+                                }
+                            }
+                            ?>
           </tr>
         </thead>
 
@@ -340,22 +340,22 @@ for ($i = 0; $i < $user_cnt; $i++) {
 
     for ($j = 0; $j < $pid_cnt; $j++) {
         $bg_color = "eeeeee";
+        $err_num = 0;
+        if (isset($U[$i]->p_wa_num[$j]) && $U[$i]->p_wa_num[$j]>0)
+            $err_num += $U[$i]->p_wa_num[$j];
+        if (isset($U[$i]->fp_wa_num[$j]) && $U[$i]->fp_wa_num[$j]>0)
+            $err_num += $U[$i]->fp_wa_num[$j];
         if (isset($U[$i]->p_ac_sec[$j]) && $U[$i]->p_ac_sec[$j] > 0) ///AC，绿色减淡
         {
             $aa = 0x33 + $U[$i]->p_wa_num[$j] * 32;
             $aa = $aa > 0xaa ? 0xaa : $aa;
             $aa = dechex($aa);
             $bg_color = "$aa" . "ff" . "$aa";
-            //$bg_color="aaffaa";
-            //if ($uuid==$first_blood[$j])
-            //{
-            //    $bg_color = "aaaaff";
-            //}
         } else if (isset($U[$i]->fp_ac_sec[$j]) && $U[$i]->fp_ac_sec[$j] > 0) ///补题赛AC，绿色减淡
         {
             $bg_color = "FFFF00";
-        } else if ((isset($U[$i]->p_wa_num[$j]) && $U[$i]->p_wa_num[$j] > 0) || (isset($U[$i]->fp_wa_num[$j]) && $U[$i]->fp_wa_num[$j] > 0)) { ///WA 红色
-            $aa = 0xaa - $U[$i]->p_wa_num[$j] * 10;
+        } else if ($err_num > 0) { ///WA 红色
+            $aa = 0xaa - $err_num * 10;
             $aa = $aa > 16 ? $aa : 16;
             $aa = dechex($aa);
             $bg_color = "ff$aa$aa";
@@ -419,10 +419,10 @@ for ($i = 0; $i < $user_cnt; $i++) {
 						sorter:'punish'
 					}
 					<?php
-for ($i = 0; $i < $pid_cnt; $i++) {
-    echo "," . ($i + 5) . ": { sorter:'punish'}";
-}
-?>
+                        for ($i = 0; $i < $pid_cnt; $i++) {
+                            echo "," . ($i + 5) . ": { sorter:'punish'}";
+                        }
+                        ?>
 				}
 			});
 
@@ -454,15 +454,15 @@ for ($i = 0; $i < $pid_cnt; $i++) {
 			var rows = tb.rows;
 			try {
 				<?php
-//若有队伍从未进行过任何提交，数据库solution表里不会有数据，榜单上该队伍不存在，总rows数量不等于报名参赛队伍数量，奖牌比例的计算会出错
-//解决办法：可以为现场赛采用人为设定有效参赛队伍数$OJ_ON_SITE_TEAM_TOTAL，值为0时则采用榜单计算。详情见db_info.inc.php
-if ($OJ_ON_SITE_TEAM_TOTAL != 0) {
-    echo "var total=" . $OJ_ON_SITE_TEAM_TOTAL . ";";
-} else {
-    echo "var total=getTotal(rows);";
-}
+                //若有队伍从未进行过任何提交，数据库solution表里不会有数据，榜单上该队伍不存在，总rows数量不等于报名参赛队伍数量，奖牌比例的计算会出错
+                //解决办法：可以为现场赛采用人为设定有效参赛队伍数$OJ_ON_SITE_TEAM_TOTAL，值为0时则采用榜单计算。详情见db_info.inc.php
+                if ($OJ_ON_SITE_TEAM_TOTAL != 0) {
+                    echo "var total=" . $OJ_ON_SITE_TEAM_TOTAL . ";";
+                } else {
+                    echo "var total=getTotal(rows);";
+                }
 
-?>
+                ?>
 
 				//alert(total);
 				for (var i=1; i<rows.length; i++) {
