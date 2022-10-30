@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- 修改人：王春祥
+	修改日期：2022/10/26
+	修改目的：尝试合并训练赛和补题赛榜单
+-->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -307,7 +311,8 @@
 						echo "<td class='text-center'><a href=userinfo.php?user=$uuid>".htmlentities($U[$i]->nick,ENT_QUOTES,"UTF-8")."</a></td>";
 
 						$usolved = $U[$i]->solved;
-						echo "<td class='text-center'><a href=status.php?user_id=$uuid&cid=$cid>$usolved</a></td>";
+						$ufsolved = $U[$i]->fsolved;
+						echo "<td class='text-center'><a href=status.php?user_id=$uuid&cid=$cid>$usolved($ufsolved)</a></td>";
 
 						echo "<td class='text-center'>".sec2str($U[$i]->time)."</td>";
 

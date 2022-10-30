@@ -39,6 +39,7 @@ if(isset($_POST['startdate'])){
   $private = $_POST['private'];
   $password = $_POST['password'];
   $description = $_POST['description'];
+  $training_id = intval($_POST['training_id']);
   
   if(get_magic_quotes_gpc()){
     $title = stripslashes($title);
@@ -56,15 +57,15 @@ if(isset($_POST['startdate'])){
   $langmask = ((1<<count($language_ext))-1)&(~$langmask);
   //echo $langmask; 
 
-  $sql = "INSERT INTO `contest`(`title`,`start_time`,`end_time`,`private`,`langmask`,`description`,`password`,`user_id`)
-          VALUES(?,?,?,?,?,?,?,?)";
+  $sql = "INSERT INTO `contest`(`title`,`start_time`,`end_time`,`private`,`langmask`,`description`,`password`,`user_id`,`training_id`)
+          VALUES(?,?,?,?,?,?,?,?,?)";
 
   $description = str_replace("<p>", "", $description); 
   $description = str_replace("</p>", "<br />", $description);
   $description = str_replace(",", "&#44; ", $description);
   $user_id=$_SESSION[$OJ_NAME.'_'.'user_id'];
-  echo $sql.$title.$starttime.$endtime.$private.$langmask.$description.$password,$user_id;
-  $cid = pdo_query($sql,$title,$starttime,$endtime,$private,$langmask,$description,$password,$user_id) ;
+  echo $sql.$title.$starttime.$endtime.$private.$langmask.$description.$password,$user_id,$training_id;
+  $cid = pdo_query($sql,$title,$starttime,$endtime,$private,$langmask,$description,$password,$user_id,$training_id) ;
   echo "Add Contest ".$cid;
 
   $sql = "DELETE FROM `contest_problem` WHERE `contest_id`=$cid";
@@ -183,6 +184,9 @@ else{
       <input class=input-large type=date name='enddate' value='<?php echo date('Y').'-'. date('m').'-'.date('d')?>' size=4 >
       Hour: <input class=input-mini type=text name=ehour size=2 value=<?php echo (date('H')+4)%24?>>&nbsp;
       Minute: <input class=input-mini type=text name=eminute value=00 size=2 >
+    </p>
+    <p align=left>
+    训题赛id: <input class=input-mini type=text name=training_id>
     </p>
     <br>
     <p align=left>

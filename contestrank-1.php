@@ -103,10 +103,15 @@ function s_cmp($A,$B) {
 if (!isset($_GET['cid']))
 	die("No Such Contest!");
 
-$cid = intval($_GET['cid']);
+$f_cid = intval($_GET['cid']);
+$start_time = 0;
+$end_time = 0;
+
+$tstart_time = 0;
+$tend_time = 0;
 
 if ($OJ_MEMCACHE) {
-	$sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=$cid";
+	$sql = "SELECT `start_time`,`title`,`end_time`,`training_id` FROM `contest` WHERE `contest_id`=$f_cid";
 	require("./include/memcache.php");
 	$result = mysql_query_cache($sql);
 
@@ -116,17 +121,49 @@ if ($OJ_MEMCACHE) {
 		$rows_cnt = 0;
 }
 else {
-	$sql = "SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`=?";
-	$result = pdo_query($sql,$cid);
+	$sql = "SELECT `start_time`,`title`,`end_time`,`training_id` FROM `contest` WHERE `contest_id`=?";
+	$result = pdo_query($sql,$f_cid);
 
 	if($result)
 		$rows_cnt = count($result);
 	else
 		$rows_cnt = 0;
 }
+if ($rows_cnt > 0) {
+//       $row=$result[0];
 
-$start_time = 0;
-$end_time = 0;
+		if ($OJ_MEMCACHE) {
+				$row = $result[0];
+		} else {
+				$row = $result[0];
+		}
+		$start_time = strtotime($row['start_time']);
+		$end_time = strtotime($row['end_time']);
+		$title = $row['title'];
+		$t_cid = $row['training_id'];
+		if($t_cid == "")
+				$t_cid = $f_cid;
+}
+
+if ($OJ_MEMCACHE) {
+	$sql = "SELECT `start_time`,`title`,`end_time`,`training_id` FROM `contest` WHERE `contest_id`='$t_cid'";
+	require "./include/memcache.php";
+	$result = mysql_query_cache($sql);
+	if ($result) {
+			$rows_cnt = count($result);
+	} else {
+			$rows_cnt = 0;
+	}
+
+} else {
+	$sql = "SELECT `start_time`,`title`,`end_time`,`training_id`  FROM `contest` WHERE `contest_id`=?";
+	$result = pdo_query($sql, $t_cid);
+	if ($result) {
+			$rows_cnt = count($result);
+	} else {
+			$rows_cnt = 0;
+	}
+}
 
 if ($rows_cnt>0) {
 	//$row=$result[0];
@@ -136,9 +173,8 @@ if ($rows_cnt>0) {
 	else
 		$row = $result[0];
 
-	$start_time = strtotime($row['start_time']);
-	$end_time = strtotime($row['end_time']);
-	$title = $row['title'];
+	$tstart_time = strtotime($row['start_time']);
+	$tend_time = strtotime($row['end_time']);
 }
 
 if (!$OJ_MEMCACHE)
@@ -180,7 +216,7 @@ if (time()>$view_lock_time && time()<$end_time+$OJ_RANK_LOCK_DELAY) {
 }
 
 if ($OJ_MEMCACHE) {
-	$sql = "SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`='$cid'";
+	$sql = "SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`='$f_cid'";
 	//require("./include/memcache.php");
 	$result = mysql_query_cache($sql);
 	
@@ -191,7 +227,7 @@ if ($OJ_MEMCACHE) {
 }
 else {
 	$sql = "SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`=?";
-	$result = pdo_query($sql,$cid);
+	$result = pdo_query($sql,$f_cid);
 
 	if ($result)
 		$rows_cnt = count($result);
@@ -207,14 +243,11 @@ else
 //$row=$result[0];
 $pid_cnt = intval($row['pbc']);
 
-$fcid = $cid;
-$cid = $cid ^ 1;
-
 if ($OJ_MEMCACHE) {
     $sql = "SELECT
       user_id,nick,solution.result,solution.num,solution.in_date,solution.pass_rate,solution.contest_id
               FROM
-                 solution where (solution.contest_id='$cid' or solution.contest_id='$fcid') and num>=0 and problem_id>0
+                 solution where (solution.contest_id='$f_cid' or solution.contest_id='$t_cid') and num>=0 and problem_id>0
       ORDER BY user_id,solution_id";
     $result = mysql_query_cache($sql);
     if ($result) {
@@ -229,7 +262,7 @@ if ($OJ_MEMCACHE) {
               FROM
                  solution where (solution.contest_id=? or solution.contest_id=?) and num>=0 and problem_id>0
       ORDER BY user_id,solution_id";
-    $result = pdo_query($sql, $cid, $fcid);
+    $result = pdo_query($sql, $t_cid, $f_cid);
     if ($result) {
         $rows_cnt = count($result);
     } else {
@@ -257,10 +290,18 @@ for ($i=0; $i<$rows_cnt; $i++) {
 		$user_name = $n_user;
 	}
 
-	if (time()<$end_time+$OJ_RANK_LOCK_DELAY && $lock<strtotime($row['in_date']))
-		$U[$user_cnt]->Add($row['num'],strtotime($row['in_date'])-$start_time,0,$row["contest_id"] == $cid);
-	else
-		$U[$user_cnt]->Add($row['num'],strtotime($row['in_date'])-$start_time,intval($row['result']),$row["contest_id"] == $cid);
+	if (time()<$tend_time+$OJ_RANK_LOCK_DELAY && $lock<strtotime($row['in_date'])) {
+		if($row["contest_id"] == $t_cid)
+			$U[$user_cnt]->Add($row['num'],strtotime($row['in_date'])-$tstart_time,0,$row["contest_id"] == $t_cid);
+		else
+			$U[$user_cnt]->Add($row['num'],strtotime($row['in_date'])-$start_time,0,$row["contest_id"] == $t_cid);
+	}
+	else {
+		if($row["contest_id"] == $t_cid)
+			$U[$user_cnt]->Add($row['num'],strtotime($row['in_date'])-$tstart_time,intval($row['result']),$row["contest_id"] == $t_cid);
+		else
+			$U[$user_cnt]->Add($row['num'],strtotime($row['in_date'])-$start_time,intval($row['result']),$row["contest_id"] == $t_cid);
+	}
 }
 
 usort($U,"s_cmp");

@@ -36,6 +36,7 @@ if(isset($_POST['startdate'])){
   $private = $_POST['private'];
   $password = $_POST['password'];
   $description = $_POST['description'];
+  $training_id = intval($_POST['training_id']);
  
   if(get_magic_quotes_gpc()){
     $title = stripslashes($title);
@@ -62,9 +63,9 @@ if(isset($_POST['startdate'])){
   $description = str_replace(",", "&#44;", $description);
 
 
-  $sql = "UPDATE `contest` SET `title`=?,`description`=?,`start_time`=?,`end_time`=?,`private`=?,`langmask`=?,`password`=? WHERE `contest_id`=?";
+  $sql = "UPDATE `contest` SET `title`=?,`description`=?,`start_time`=?,`end_time`=?,`private`=?,`langmask`=?,`password`=?,`training_id`=? WHERE `contest_id`=?";
   //echo $sql;
-  pdo_query($sql,$title,$description,$starttime,$endtime,$private,$langmask,$password,$cid);
+  pdo_query($sql,$title,$description,$starttime,$endtime,$private,$langmask,$password,$training_id,$cid);
 
   $sql = "DELETE FROM `contest_problem` WHERE `contest_id`=?";
   pdo_query($sql,$cid);
@@ -131,6 +132,7 @@ if(isset($_POST['startdate'])){
   $password = $row['password'];
   $langmask = $row['langmask'];
   $description = $row['description'];
+  $training_id = $row['training_id'];
   $title = htmlentities($row['title'],ENT_QUOTES,"UTF-8");
 
   $plist = "";
@@ -172,6 +174,9 @@ if(isset($_POST['startdate'])){
       <input class=input-large type=date name='enddate' value='<?php echo substr($endtime,0,10)?>' size=4 >
       Hour: <input class=input-mini type=text name=ehour size=2 value='<?php echo substr($endtime,11,2)?>'>&nbsp;
       Minute: <input class=input-mini type=text name=eminute value='<?php echo substr($endtime,14,2)?>' size=2 >
+    </p>
+    <p align=left>
+    训题赛id: <input class=input-mini type=text name=training_id value='<?php echo $training_id ?>'>
     </p>
     <br>
     <p align=left>

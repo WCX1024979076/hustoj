@@ -129,7 +129,7 @@ if (isset($_GET['cid'])) {
 		$view_title = $row['title'];
 		$view_start_time = $row['start_time'];
 		$view_end_time = $row['end_time'];
-
+    $training_id = $row['training_id'];
 		if (!isset($_SESSION[$OJ_NAME.'_'.'administrator']) && $now<$start_time) {
 			$view_errors = "<center>";
 			$view_errors .= "<h3>$MSG_CONTEST_ID : $view_cid - $view_title</h3>";

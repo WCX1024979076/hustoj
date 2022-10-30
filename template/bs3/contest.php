@@ -22,7 +22,14 @@
 
 <body>
 <div class="container">
-  <?php include("template/$OJ_TEMPLATE/nav.php");?>
+  <?php
+  var_dump($training_id);
+  if($training_id == "")
+    include("template/$OJ_TEMPLATE/nav.php");
+  else
+    include("template/$OJ_TEMPLATE/nav2.php");
+
+  ?>
   <!-- Main component for a primary marketing message or call to action -->
   <div class="jumbotron">
     <center>
