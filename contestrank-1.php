@@ -104,6 +104,11 @@ if (!isset($_GET['cid']))
 	die("No Such Contest!");
 
 $f_cid = intval($_GET['cid']);
+
+$page=1;
+if (isset($_GET['page'])) $page=intval($_GET['page']);
+$num_each_page=200;
+
 $start_time = 0;
 $end_time = 0;
 
@@ -305,6 +310,8 @@ for ($i=0; $i<$rows_cnt; $i++) {
 }
 
 usort($U,"s_cmp");
+$view_total_page=$user_cnt/$num_each_page;
+if($user_cnt%$num_each_page!=0) $view_total_page++;
 
 /////////////////////////Template
 require("template/".$OJ_TEMPLATE."/contestrank-1.php");

@@ -1,5 +1,5 @@
 <?php
-        $OJ_CACHE_SHARE=false;
+        $OJ_CACHE_SHARE=true;
         $cache_time=10;
         require_once('./include/cache_start.php');
     require_once('./include/db_info.inc.php');
@@ -50,12 +50,7 @@ class TM{
                         $this->p_ac_sec[$pid]=$sec;
                         $this->solved++;
                         if(!isset($this->p_wa_num[$pid])) $this->p_wa_num[$pid]=0;
-                        if(isset($this->p_pass_rate[$pid])){
-				$this->total-=$this->p_pass_rate[$pid]*100;
-			}else{
-				$this->p_pass_rate[$pid]=$res;
-			}
-				
+                        if(isset($this->p_pass_rate[$pid]))$this->total-=$this->p_pass_rate[$pid]*100;
 			$this->total+=100;
 			$this->time+=$sec+$this->p_wa_num[$pid]*1200;
 //                      echo "Time:".$this->time."<br>";
@@ -79,6 +74,9 @@ function s_cmp($A,$B){
 if (!isset($_GET['cid'])) die("No Such Contest!");
 $cid=intval($_GET['cid']);
 
+$page=1;
+if (isset($_GET['page'])) $page=intval($_GET['page']);
+$num_each_page=200;
 
 if($OJ_MEMCACHE){
 		$sql="SELECT `start_time`,`title`,`end_time` FROM `contest` WHERE `contest_id`='$cid'";
@@ -119,13 +117,7 @@ if ($start_time>time()){
         require("template/".$OJ_TEMPLATE."/error.php");
         exit(0);
 }
-	$noip = (time()<$end_time) && (stripos($title,$OJ_NOIP_KEYWORD)!==false);
-	if(isset($_SESSION[$OJ_NAME.'_'."administrator"])||
-		isset($_SESSION[$OJ_NAME.'_'."m$cid"])||
-		isset($_SESSION[$OJ_NAME.'_'."source_browser"])||
-		isset($_SESSION[$OJ_NAME.'_'."contest_creator"])
-	   ) $noip=false;
-if ($noip) {
+if(time()<$end_time && stripos($title,$OJ_NOIP_KEYWORD)!==false){
       $view_errors =  "<h2>$MSG_NOIP_WARNING</h2>";
       require("template/".$OJ_TEMPLATE."/error.php");
       exit(0);
@@ -135,12 +127,8 @@ $OJ_RANK_LOCK_PERCENT=1;
 $lock=$end_time-($end_time-$start_time)*$OJ_RANK_LOCK_PERCENT;
 
 //echo $lock.'-'.date("Y-m-d H:i:s",$lock);
-$view_lock_time = $start_time + ($end_time - $start_time) * (1 - $OJ_RANK_LOCK_PERCENT);
-$locked_msg = "";
-if (time() > $view_lock_time && time() < $end_time + $OJ_RANK_LOCK_DELAY) {
-    $locked_msg = "The board has been locked.";
-}
 
+//$result=pdo_query($sql);
 if($OJ_MEMCACHE){
 //        require("./include/memcache.php");
 		$sql="SELECT count(1) as pbc FROM `contest_problem` WHERE `contest_id`='$cid'";
@@ -193,6 +181,8 @@ for ($i=0;$i<$rows_cnt;$i++){
        
 }
 usort($U,"s_cmp");
+$view_total_page=$user_cnt/$num_each_page;
+if($user_cnt%$num_each_page!=0) $view_total_page++;
 
 ////firstblood
 $first_blood=array();

@@ -58,19 +58,18 @@ class TM
                         $this->total -= $this->p_pass_rate[$pid] * 100;
                         $this->p_pass_rate[$pid] = $res;
 
-                        $this->all_total -= $this->fp_pass_rate[$pid];
-                        $this->fp_pass_rate[$pid] = max($this->fp_pass_rate[$pid], $res);
-                        $this->all_total += $this->fp_pass_rate[$pid];
+                        $this->all_total -= $this->fp_pass_rate[$pid] * 100;
+                        $this->fp_pass_rate[$pid] = $res;
+                        $this->all_total += $this->fp_pass_rate[$pid] * 100;
 
                         $this->total += $this->p_pass_rate[$pid] * 100;
                     }
                 } else {
                     $this->p_pass_rate[$pid] = $res;
+		    $this->fp_pass_rate[$pid] = $res;
                     $this->total += $res * 100;
                     
-                    $this->all_total -= $this->fp_pass_rate[$pid];
-                    $this->fp_pass_rate[$pid] = max($this->fp_pass_rate[$pid], $res);
-                    $this->all_total += $this->fp_pass_rate[$pid];
+                    $this->all_total += $res * 100;
                 }
                 if (isset($this->p_wa_num[$pid])) {
                     $this->p_wa_num[$pid]++;
@@ -88,7 +87,7 @@ class TM
 
                 if (isset($this->p_pass_rate[$pid])) {
                     $this->total -= $this->p_pass_rate[$pid] * 100;
-                    $this->all_total -= $this->p_pass_rate[$pid] * 100;
+                    $this->all_total -= $this->fp_pass_rate[$pid] * 100;
                 } else {
                   $this->fp_pass_rate[$pid] = $this->p_pass_rate[$pid] = $res;
                 }
@@ -113,7 +112,7 @@ class TM
                     $this->fp_pass_rate[$pid] = $res;
                     $this->all_total += $res * 100;
                 }
-                if (isset($this->p_wa_num[$pid])) {
+                if (isset($this->fp_wa_num[$pid])) {
                     $this->fp_wa_num[$pid]++;
                 } else {
                     $this->fp_wa_num[$pid] = 1;
@@ -162,6 +161,10 @@ if (!isset($_GET['cid'])) {
 $f_cid = intval($_GET['cid']);
 $start_time = 0;
 $end_time = 0;
+
+$page=1;
+if (isset($_GET['page'])) $page=intval($_GET['page']);
+$num_each_page=200;
 
 $tstart_time = 0;
 $tend_time = 0;
@@ -361,8 +364,9 @@ for ($i = 0; $i < $rows_cnt; $i++) {
     }
 }
 usort($U, "s_cmp");
+$view_total_page=$user_cnt/$num_each_page;
+if($user_cnt%$num_each_page!=0) $view_total_page++;
 // echo("<br>");
-// print_r($U);
 
 /////////////////////////Template
 require "template/" . $OJ_TEMPLATE . "/contestrank-oi-1.php";
