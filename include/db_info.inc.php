@@ -7,8 +7,12 @@
 // connect db 
 static 	$DB_HOST="localhost";  //数据库服务器ip或域名
 static 	$DB_NAME="jol";   //数据库名
-static 	$DB_USER="debian-sys-maint";  //数据库账户
-static 	$DB_PASS="75MBSB8GlzlkITLg";  //数据库密码
+//static 	$DB_USER="debian-sys-maint";  //数据库账户
+//static 	$DB_PASS="75MBSB8GlzlkITLg";  //数据库密码
+
+
+static  $DB_USER="root";
+static  $DB_PASS="upc1953root?";
 
 static 	$OJ_NAME="HUSTOJ";  //左上角显示的系统名称
 static 	$OJ_HOME="./";    //主页目录
